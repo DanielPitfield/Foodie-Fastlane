@@ -28,6 +28,33 @@ export function convertTakeawayURLsToNames(takeawayURLs: TakeawayURL[]) {
   );
 }
 
+// Periodically check the active tab's content for an element with the provided selector
+export async function waitUntilElementExists<TElement extends HTMLElement>(
+  selector: string,
+  timeoutMilliseconds = 10000
+): Promise<TElement> {
+  const POLL_MILLISECONDS = 100;
+  const maxNumberOfAttempts = Math.round(timeoutMilliseconds / 100);
+  let numberOfAttempts = 0;
+
+  return new Promise<TElement>((resolve, reject) => {
+    const intervalId = setInterval(async () => {
+      const element = document.querySelector<TElement>(selector);
+
+      if (element) {
+        clearInterval(intervalId);
+        resolve(element);
+      }
+
+      if (numberOfAttempts >= maxNumberOfAttempts) {
+        reject(`Failed to find element '${selector}' after ${timeoutMilliseconds} milliseconds`);
+      }
+
+      numberOfAttempts++;
+    }, POLL_MILLISECONDS);
+  });
+}
+
 // Returns an image element (of a random image)
 export function createImage(src: string): HTMLImageElement {
   const image: HTMLImageElement = document.createElement("img");

@@ -29,7 +29,7 @@
     }
   ],
 
-  "permissions": ["tabs", "storage"],
+  "permissions": ["activeTab", "tabs", "storage"],
 
   "icons": {
     "16": "icon.png",

@@ -1,8 +1,8 @@
 import React from "react";
-import { NAME, TakeawayCategory, TakeawayURL } from "../data";
+import { NAME, TakeawayCategory, TakeawayOrder, TakeawayURL } from "../data";
 
 interface TakeawayListProps {
-  availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
+  availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL, placeOrder: (order: TakeawayOrder) => Promise<void> }[];
   selectedTakeawayCategory: TakeawayCategory;
   setSelectedTakeawayCategory: (category: TakeawayCategory | null) => void;
 }
@@ -25,7 +25,7 @@ export const TakeawayList = (props: TakeawayListProps) => {
             );
           })}
       </ul>
-      <button onClick={() => props.setSelectedTakeawayCategory(null)}>Back</button>
+      <button className="back-button" onClick={() => props.setSelectedTakeawayCategory(null)}>Back</button>
     </div>
   );
 };
