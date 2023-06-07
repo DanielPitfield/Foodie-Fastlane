@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
 import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
 import { ALL_TAKEAWAYS, TakeawayCategory, TakeawayURL, takeawayCategories } from "../data";
+import { TakeawayCategoryList } from "./TakeawayCategoryList";
+import { TakeawayList } from "./TakeawayList";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
@@ -28,6 +30,7 @@ const Popup = () => {
     })();
   }, []);
 
+  // There is already an open tab with a takeaway URL
   if (targetInfo.isOpen) {
     return (
       <div className="wrapper">
@@ -46,44 +49,23 @@ const Popup = () => {
     return <>Loading...</>;
   }
 
+  // Not yet chosen a category
   if (selectedTakeawayCategory === null) {
-    // Which takeaway categories have atleast one takeaway which is enabled?
-    const availableCategories = takeawayCategories.filter(category => availableTakeaways.some(takeaway => takeaway.category === category));
-    
-    // Show the available takeaway categories
     return (
-      <div className="wrapper">
-        <ul className="takeaway-category-list">
-          {availableCategories.map((category) => {
-            return (
-              <li key={category} className="takeaway-category-list-item">
-                <button onClick={() => setSelectedTakeawayCategory(category)} className="takeaway-category-link" style={{backgroundImage: `url(${chrome.runtime.getURL(`images/category-${category.toLowerCase()}.jpg`)})` }}>
-                  {category}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <TakeawayCategoryList
+        availableTakeaways={availableTakeaways}
+        setSelectedTakeawayCategory={setSelectedTakeawayCategory}
+      />
     );
   }
 
-  // Show the links to the available takeaways of the currently selected takeaway category
+  // Chosen a category, show the takeaways belonging to that category
   return (
-    <div className="wrapper">
-      <ul className="takeaway-list">
-        {availableTakeaways.filter(takeaway => takeaway.category === selectedTakeawayCategory).map((takeaway) => {
-          return (
-            <li key={takeaway.name} className="takeaway-list-item">
-              <a href={takeaway.url} className="takeaway-link" target="_blank" rel="noopener noreferrer">
-                {takeaway.name}
-              </a>
-            </li>
-          );
-        })}
-      </ul>
-      <button onClick={() => setSelectedTakeawayCategory(null)}>Back</button>
-    </div>
+    <TakeawayList
+      availableTakeaways={availableTakeaways}
+      selectedTakeawayCategory={selectedTakeawayCategory}
+      setSelectedTakeawayCategory={setSelectedTakeawayCategory}
+    />
   );
 };
 
