@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { ALL_TAKEAWAYS } from "../data";
+import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "../data";
 import useTargetInfo from "../hooks/useTargetInfo";
-import { getEnabledTargetTakeaways } from "../utils";
+import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
 
 const Options = () => {
   const targetInfo = useTargetInfo();
 
-  // All takeaways are enabled by default
-  const defaultTakeaways = ALL_TAKEAWAYS.map(({ name }) => {
-    return { name, isEnabled: true };
-  });
-
-  const [targetTakeaways, setTargetTakeaways] = useState<{ name: string; isEnabled: boolean }[]>(defaultTakeaways);
+  const [targetTakeaways, setTargetTakeaways] = useState<{ name: string; isEnabled: boolean }[]>(DEFAULT_TAKEAWAYS);
   const [status, setStatus] = useState<string>("");
 
   // Restores the state of the enabled takeaways (using the preferences stored in chrome.storage)
@@ -25,16 +20,8 @@ const Options = () => {
   // Update status message to show options have been saved
   function showConfirmation() {
     if (targetInfo.isOpen) {
-      // What is/are the name(s) of the open takeaway(s)?
-      const openTakeawayNames = targetInfo.openTakeawayURLs
-        // FInd the name for the URL
-        .map((takeawayURL) => ALL_TAKEAWAYS.find((takeaway) => takeaway.url === takeawayURL)?.name ?? "")
-        // Remove any which could not be resolved
-        .filter(x => x)
-        .join(", ");
-      
       // Instruct the user to refresh the open takeaway tabs
-      setStatus(`Options saved. Refresh ${openTakeawayNames}`);
+      setStatus(`Options saved. Refresh ${convertTakeawayURLsToNames(targetInfo.openTakeawayURLs)}`);
     } else {
       setStatus("Options saved. Refresh.");
     }

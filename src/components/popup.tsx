@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
+import { convertTakeawayURLsToNames } from "../utils";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
@@ -8,7 +9,7 @@ const Popup = () => {
   return (
     <div className="wrapper">
       <div className="status" data-is-target-open={targetInfo.isOpen}>
-        {targetInfo.isOpen ? "Active" : "Not Active"}
+        {targetInfo.isOpen ? `${convertTakeawayURLsToNames(targetInfo.openTakeawayURLs)}` : "Not Active"}
       </div>
 
       <div className="description">

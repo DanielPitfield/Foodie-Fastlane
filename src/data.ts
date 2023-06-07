@@ -20,7 +20,7 @@ export const ALL_TAKEAWAYS: {
     category: "Burger",
     url: "https://www.burgerking.co.uk",
   },
-  { name: "Five Guys", category: "Burger", url: "https://www.fiveguys.co.uk" },
+  { name: "Five Guys", category: "Burger", url: "https://fiveguys.co.uk" },
   {
     name: "TGI Fridays",
     category: "Burger",
@@ -61,6 +61,10 @@ export const ALL_TAKEAWAYS: {
   { name: "Fireaway", category: "Pizza", url: "https://fireaway.co.uk/" },
 ];
 
+// Every takeaway option is enabled by default
+export const DEFAULT_TAKEAWAYS = ALL_TAKEAWAYS.map(({ name }) => {
+  return { name, isEnabled: true };
+});
 export const TAKEAWAY_URLS = ALL_TAKEAWAYS.map((takeaway) => takeaway.url);
 export const images: string[] = [chrome.runtime.getURL("images/test.jpg")];
 export const allTargetSelectors: TargetSelector[] = [{ selector: "._1cRje", label: "Test" }];
