@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+
+  "name": "Foodie Fastlane",
+  "version": "1.0.0",
+  "description": "Chrome extension to automatically place orders for online takeaways!",
+
+  "options_ui": {
+    "page": "options.html"
+  },
+
+  "action": {
+    "default_title": "Foodie Fastlane",
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.fiveguys.co.uk/*"],
+      "js": ["js/vendor.js", "js/content_script.js"]
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "matches": ["*://*.fiveguys.co.uk/*"],
+      "resources": ["images/*"]
+    }
+  ],
+
+  "permissions": ["tabs", "storage"],
+
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
