@@ -1,5 +1,5 @@
 import React from "react";
-import { TakeawayCategory, TakeawayURL } from "../data";
+import { NAME, TakeawayCategory, TakeawayURL } from "../data";
 
 interface TakeawayListProps {
   availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
@@ -11,6 +11,7 @@ export const TakeawayList = (props: TakeawayListProps) => {
   // Show the links to the available takeaways of the currently selected takeaway category
   return (
     <div className="wrapper">
+      <h3 className="title">{NAME}</h3>
       <ul className="takeaway-list">
         {props.availableTakeaways
           .filter((takeaway) => takeaway.category === props.selectedTakeawayCategory)

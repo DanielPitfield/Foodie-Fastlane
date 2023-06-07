@@ -34,6 +34,15 @@ img {
   user-select: none;
 }
 
+.title {
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
+  margin-bottom: 1em;
+  text-transform: uppercase;
+  font-size: 1.5em;
+}
+
 .description {
   display: flex;
   justify-content: center;

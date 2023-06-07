@@ -1,5 +1,5 @@
 import React from "react";
-import { TakeawayCategory, TakeawayURL, takeawayCategories } from "../data";
+import { NAME, TakeawayCategory, TakeawayURL, takeawayCategories } from "../data";
 
 interface TakeawayCategoryListProps {
   availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
@@ -15,6 +15,7 @@ export const TakeawayCategoryList = (props: TakeawayCategoryListProps) => {
   // Show the available takeaway categories
   return (
     <div className="wrapper">
+      <h3 className="title">{NAME}</h3>
       <ul className="takeaway-category-list">
         {availableCategories.map((category) => {
           return (
