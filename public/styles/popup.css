@@ -55,7 +55,8 @@ img {
 .takeaway-category-list .takeaway-category-list-item {
   display: flex;
   list-style: none;
-  margin-top: 0.45em;
+  margin: 0;
+  margin-bottom: 1.2em;
   min-width: 15em;
 }
 
@@ -82,12 +83,16 @@ img {
   font-family: inherit;
   font-size: 18px;
   background-size: cover;
-  background-position: center center;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
 .takeaway-category-link {
-  background-image: attr(data-background-url);
+  color: white;
+  height: 3em;
+  font-size: 2em;
+  margin: 0;
+  padding: 0;
 }
 
 .takeaway-link:focus,
@@ -99,6 +104,7 @@ img {
 .takeaway-category-link:hover {
   box-shadow: #2d23424d 0 4px 8px, #2d234233 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
   transform: translateY(-2px);
+  text-decoration: none;
 }
 
 .takeaway-link:active,

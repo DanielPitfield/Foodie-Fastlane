@@ -56,8 +56,8 @@ const Popup = () => {
         <ul className="takeaway-category-list">
           {availableCategories.map((category) => {
             return (
-              <li key={category} className="takeaway-list-item" data-background-url={chrome.runtime.getURL(`images/category-${category}.jpg`)}>
-                <button onClick={() => setSelectedTakeawayCategory(category)} className="takeaway-category-link button">
+              <li key={category} className="takeaway-category-list-item">
+                <button onClick={() => setSelectedTakeawayCategory(category)} className="takeaway-category-link" style={{backgroundImage: `url(${chrome.runtime.getURL(`images/category-${category.toLowerCase()}.jpg`)})` }}>
                   {category}
                 </button>
               </li>
@@ -75,7 +75,7 @@ const Popup = () => {
         {availableTakeaways.filter(takeaway => takeaway.category === selectedTakeawayCategory).map((takeaway) => {
           return (
             <li key={takeaway.name} className="takeaway-list-item">
-              <a href={takeaway.url} className="takeaway-link button" target="_blank" rel="noopener noreferrer">
+              <a href={takeaway.url} className="takeaway-link" target="_blank" rel="noopener noreferrer">
                 {takeaway.name}
               </a>
             </li>
