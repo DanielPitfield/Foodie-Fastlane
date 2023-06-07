@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
 import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
-import { ALL_TAKEAWAYS, TakeawayCategory, TakeawayURL } from "../data";
+import { ALL_TAKEAWAYS, TakeawayCategory, TakeawayURL, takeawayCategories } from "../data";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
   const [availableTakeaways, setAvailableTakeaways] =
     useState<{ name: string; category: TakeawayCategory; url: TakeawayURL }[]>();
+  const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -15,7 +16,7 @@ const Popup = () => {
       const enabledTakeaways = await getEnabledTargetTakeaways();
 
       // Get the entire information for the takeaways
-      const details = enabledTakeaways
+      const newAvailableTakeaways = enabledTakeaways
         // Map each option to its takeaway info (URL, category etc.)
         .map((enabledTakeaway) => ALL_TAKEAWAYS.find((takeaway) => takeaway.name === enabledTakeaway.name))
         // Filter out options which could not be mapped
@@ -23,7 +24,7 @@ const Popup = () => {
         // Tell TypeScript there are no undefined values
         .map((x) => x!);
 
-      setAvailableTakeaways(details);
+      setAvailableTakeaways(newAvailableTakeaways);
     })();
   }, []);
 
@@ -45,11 +46,33 @@ const Popup = () => {
     return <>Loading...</>;
   }
 
-  // Show the links to the available takeaways
+  if (selectedTakeawayCategory === null) {
+    // Which takeaway categories have atleast one takeaway which is enabled?
+    const availableCategories = takeawayCategories.filter(category => availableTakeaways.some(takeaway => takeaway.category === category));
+    
+    // Show the available takeaway categories
+    return (
+      <div className="wrapper">
+        <ul className="takeaway-category-list">
+          {availableCategories.map((category) => {
+            return (
+              <li key={category} className="takeaway-list-item" data-background-url={chrome.runtime.getURL(`images/category-${category}.jpg`)}>
+                <button onClick={() => setSelectedTakeawayCategory(category)} className="takeaway-category-link button">
+                  {category}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
+  // Show the links to the available takeaways of the currently selected takeaway category
   return (
     <div className="wrapper">
       <ul className="takeaway-list">
-        {availableTakeaways.map((takeaway) => {
+        {availableTakeaways.filter(takeaway => takeaway.category === selectedTakeawayCategory).map((takeaway) => {
           return (
             <li key={takeaway.name} className="takeaway-list-item">
               <a href={takeaway.url} className="takeaway-link button" target="_blank" rel="noopener noreferrer">
@@ -59,6 +82,7 @@ const Popup = () => {
           );
         })}
       </ul>
+      <button onClick={() => setSelectedTakeawayCategory(null)}>Back</button>
     </div>
   );
 };

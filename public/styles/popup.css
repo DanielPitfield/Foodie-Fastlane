@@ -45,19 +45,22 @@ img {
   background-color: #fdfdfd;
 }
 
-.takeaway-list {
+.takeaway-list,
+.takeaway-category-list {
   padding: 0;
   margin: 0;
 }
 
-.takeaway-list .takeaway-list-item {
+.takeaway-list .takeaway-list-item,
+.takeaway-category-list .takeaway-category-list-item {
   display: flex;
   list-style: none;
   margin-top: 0.45em;
   min-width: 15em;
 }
 
-.takeaway-link {
+.takeaway-link,
+.takeaway-category-link {
   display: flex;
   height: 48px;
   flex-grow: 1;
@@ -78,19 +81,28 @@ img {
   white-space: nowrap;
   font-family: inherit;
   font-size: 18px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
-.takeaway-link:focus {
-  box-shadow: #d6d6e7 0 0 0 1.5px inset, #2d234266 0 2px 4px, #2d23424d 0 7px 13px -3px,
-    #d6d6e7 0 -3px 0 inset;
+.takeaway-category-link {
+  background-image: attr(data-background-url);
 }
 
-.takeaway-link:hover {
+.takeaway-link:focus,
+.takeaway-category-link:focus {
+  box-shadow: #d6d6e7 0 0 0 1.5px inset, #2d234266 0 2px 4px, #2d23424d 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+}
+
+.takeaway-link:hover,
+.takeaway-category-link:hover {
   box-shadow: #2d23424d 0 4px 8px, #2d234233 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
-.takeaway-link:active {
+.takeaway-link:active,
+.takeaway-category-link:active {
   box-shadow: #d6d6e7 0 3px 7px inset;
   transform: translateY(2px);
 }

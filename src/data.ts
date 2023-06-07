@@ -1,5 +1,6 @@
-export type TakeawayCategory = "Pizza" | "Burger" | "Sandwich" | "Coffee" | "Sushi";
+export type TakeawayCategory = typeof takeawayCategories[number];
 export type TakeawayURL = typeof TAKEAWAY_URLS[number];
+
 export type TargetSelector = { selector: string; label: string };
 
 export const NAME = "Foodie Fastlane";
@@ -65,6 +66,9 @@ export const ALL_TAKEAWAYS: {
 export const DEFAULT_TAKEAWAYS = ALL_TAKEAWAYS.map(({ name }) => {
   return { name, isEnabled: true };
 });
+
+export const takeawayCategories = ["Pizza", "Burger", "Sandwich", "Coffee", "Sushi"] as const;
 export const TAKEAWAY_URLS = ALL_TAKEAWAYS.map((takeaway) => takeaway.url);
+
 export const images: string[] = [chrome.runtime.getURL("images/test.jpg")];
 export const allTargetSelectors: TargetSelector[] = [{ selector: "._1cRje", label: "Test" }];
