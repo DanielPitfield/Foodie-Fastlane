@@ -2,7 +2,7 @@ import React from "react";
 import { NAME, TakeawayCategory, TakeawayOrder, TakeawayURL, takeawayCategories } from "../data";
 
 interface TakeawayCategoryListProps {
-  availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL, placeOrder: (order: TakeawayOrder) => Promise<void> }[];
+  availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
   setSelectedTakeawayCategory: (category: TakeawayCategory | null) => void;
 }
 

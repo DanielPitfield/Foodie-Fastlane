@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
 import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
-import { ALL_TAKEAWAYS, NAME, TakeawayCategory, TakeawayOrder, TakeawayURL } from "../data";
+import { ALL_TAKEAWAYS, NAME, TakeawayCategory, TakeawayURL } from "../data";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
 
@@ -13,7 +13,6 @@ const Popup = () => {
       name: string;
       category: TakeawayCategory;
       url: TakeawayURL;
-      placeOrder: (order: TakeawayOrder) => Promise<void>;
     }[]
   >();
   const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);

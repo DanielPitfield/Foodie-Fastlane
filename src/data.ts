@@ -1,18 +1,31 @@
-import { waitUntilElementExists } from "./utils";
+import { SEVEN_BONE } from "./takeaways/7Bone";
+import { BURGER_KING } from "./takeaways/burgerKing";
+import { COSTA } from "./takeaways/costa";
+import { DOMINOS } from "./takeaways/dominos";
+import { FIREAWAY } from "./takeaways/fireaway";
+import { FIVE_GUYS } from "./takeaways/fiveGuys";
+import { GREGGS } from "./takeaways/greggs";
+import { KFC } from "./takeaways/kfc";
+import { LEON } from "./takeaways/leon";
+import { MC_DONALDS } from "./takeaways/mcDonalds";
+import { PAPA_JOHNS } from "./takeaways/papaJohns";
+import { PIZZA_EXPRESS } from "./takeaways/pizzaExpress";
+import { PIZZA_HUT } from "./takeaways/pizzaHut";
+import { PRET_A_MANGER } from "./takeaways/pretAManger";
+import { SUBWAY } from "./takeaways/subway";
+import { TGI_FRIDAYS } from "./takeaways/tgiFridays";
+import { WAGAMAMA } from "./takeaways/wagamama";
+import { YO_SUSHI } from "./takeaways/yoSushi";
 
 export type TakeawayCategory = typeof takeawayCategories[number];
 export type TakeawayURL = typeof TAKEAWAY_URLS[number];
 
-export type TakeawayOrder =
-  | {
-      type: "delivery";
-      address: TakeawayOrderAddress;
-      time: "ASAP" | Date;
-    }
-  | {
-      type: "collection";
-      time: "ASAP" | Date;
-    };
+export type TakeawayOrder = {
+  type: "delivery" | "collection";
+  address: TakeawayOrderAddress;
+  time: "ASAP" | Date;
+  food: TakeawayOrderFood[];
+};
 
 export type TakeawayOrderAddress = {
   street1: string;
@@ -21,118 +34,43 @@ export type TakeawayOrderAddress = {
   townCity: string;
 };
 
+export type TakeawayOrderFood = {
+  name: string;
+  quantity: number;
+  status?: "adding-to-cart" | "added-to-cart";
+  options?: TakeawayOrderFood[];
+}
+
 export const NAME = "Foodie Fastlane";
 
 export const ALL_TAKEAWAYS: {
   name: string;
   category: TakeawayCategory;
   url: string;
-  placeOrder: (order: TakeawayOrder) => Promise<void>;
+  placeOrderStages: {
+    name: string;
+    urls: string[];
+    placeOrder: (order: TakeawayOrder, logger: (message: string) => void) => Promise<void>;
+  }[];
 }[] = [
-  {
-    name: "McDonald's",
-    category: "Burger",
-    url: "https://www.mcdonalds.co.uk",
-    placeOrder: async () => {},
-  },
-  { name: "KFC", category: "Burger", url: "https://www.kfc.co.uk", placeOrder: async () => {} },
-  {
-    name: "Burger King",
-    category: "Burger",
-    url: "https://www.burgerking.co.uk",
-    placeOrder: async () => {},
-  },
-  {
-    name: "Five Guys",
-    category: "Burger",
-    url: "https://order.fiveguys.co.uk",
-    placeOrder: async (order: TakeawayOrder) => {
-      const storeId = 171; // TODO: Determine store from order.address
-      const MENU_URL = "https://order.fiveguys.co.uk/menu";
-
-      // If already at the menu page
-      if (window.location.href === MENU_URL) {
-        return;
-      }
-
-      // Otherwise, go to the 'time slot selection' page
-      window.location.href = `https://order.fiveguys.co.uk/TimeSlotSelection?storeId=${storeId}&orderType=ClickAndCollect`;
-
-      // If the order is not wanted as-soon-as-possible
-      if (order.time !== "ASAP") {
-        // Round the time to the nearest 5-minute slot
-        order.time.setMinutes(Math.ceil(order.time.getMinutes() / 5) * 5);
-
-        const timeString = `${order.time.getHours().toString().padStart(2, "0")}${order.time
-          .getMinutes()
-          .toString()
-          .padStart(2, "0")}`;
-
-        const timeSlotOption = await waitUntilElementExists<HTMLOptionElement>(
-          `select#daywiseslot option[value$='${timeString}']`
-        );
-
-        if (!timeSlotOption) {
-          throw new Error(`No time slot found for ${order.time}`);
-        }
-
-        // Select the 'time slot' option
-        timeSlotOption.selected = true;
-      }
-
-      const placeOrderButton = await waitUntilElementExists<HTMLButtonElement>(".use_location_btn .btn");
-
-      if (!placeOrderButton) {
-        throw new Error("Could not find the 'Place Order' button");
-      }
-
-      placeOrderButton.click();
-    },
-  },
-  {
-    name: "TGI Fridays",
-    category: "Burger",
-    url: "https://www.tgifridays.co.uk",
-    placeOrder: async () => {},
-  },
-  { name: "Leon", category: "Burger", url: "https://www.leon.co", placeOrder: async () => {} },
-  { name: "7Bone", category: "Burger", url: "https://7bone.co.uk/", placeOrder: async () => {} },
-  { name: "Subway", category: "Sandwich", url: "https://www.subway.com/en-GB", placeOrder: async () => {} },
-  { name: "Greggs", category: "Sandwich", url: "https://www.greggs.co.uk", placeOrder: async () => {} },
-  {
-    name: "Costa Coffee",
-    category: "Sandwich",
-    url: "https://www.costa.co.uk",
-    placeOrder: async () => {},
-  },
-  {
-    name: "Pret a Manger",
-    category: "Sandwich",
-    url: "https://www.pret.co.uk",
-    placeOrder: async () => {},
-  },
-  { name: "Wagamama", category: "Sushi", url: "https://www.wagamama.com", placeOrder: async () => {} },
-  { name: "Yo! Sushi", category: "Sushi", url: "https://www.yosushi.com", placeOrder: async () => {} },
-  {
-    name: "Domino's Pizza",
-    category: "Pizza",
-    url: "https://www.dominos.co.uk",
-    placeOrder: async () => {},
-  },
-  { name: "Pizza Hut", category: "Pizza", url: "https://www.pizzahut.co.uk", placeOrder: async () => {} },
-  {
-    name: "Papa John's",
-    category: "Pizza",
-    url: "https://www.papajohns.co.uk",
-    placeOrder: async () => {},
-  },
-  {
-    name: "PizzaExpress",
-    category: "Pizza",
-    url: "https://www.pizzaexpress.com",
-    placeOrder: async () => {},
-  },
-  { name: "Fireaway", category: "Pizza", url: "https://fireaway.co.uk/", placeOrder: async () => {} },
+  MC_DONALDS,
+  KFC,
+  BURGER_KING,
+  FIVE_GUYS,
+  TGI_FRIDAYS,
+  LEON,
+  SEVEN_BONE,
+  SUBWAY,
+  GREGGS,
+  COSTA,
+  PRET_A_MANGER,
+  WAGAMAMA,
+  YO_SUSHI,
+  DOMINOS,
+  PIZZA_HUT,
+  PAPA_JOHNS,
+  PIZZA_EXPRESS,
+  FIREAWAY,
 ];
 
 // Every takeaway option is enabled by default
