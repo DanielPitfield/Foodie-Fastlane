@@ -66,7 +66,7 @@ const Options = () => {
             <input
               type="checkbox"
               className="option-checkbox"
-              checked={targetTakeaways?.some((option) => option.name === name && option.isEnabled)}
+              checked={targetTakeaways.some((option) => option.name === name && option.isEnabled)}
               onClick={() => toggleOption(name)}
             />
             <span className="option-text">{name}</span>

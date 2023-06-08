@@ -22,7 +22,7 @@ export function convertTakeawayURLsToNames(takeawayURLs: TakeawayURL[]) {
     takeawayURLs
       // Find the name for the URL
       .map((takeawayURL) => ALL_TAKEAWAYS.find((takeaway) => takeaway.url === takeawayURL)?.name ?? "")
-      // Remove any which could not be resolved
+      // Remove those where a name could not be resolved
       .filter((x) => x)
       .join(", ")
   );
@@ -31,11 +31,11 @@ export function convertTakeawayURLsToNames(takeawayURLs: TakeawayURL[]) {
 // Periodically check the active tab's content for an element with the provided selector
 export async function waitUntilElementExists<TElement extends HTMLElement>(
   selector: string,
-  timeoutMilliseconds = 10000
+  timeoutMs = 10000
 ): Promise<TElement> {
-  const POLL_MILLISECONDS = 100;
-  const maxNumberOfAttempts = Math.round(timeoutMilliseconds / 100);
-  let numberOfAttempts = 0;
+  const POLL_INTERVAL_MS = 100;
+  const MAX_NUM_ATTEMPTS = Math.round(timeoutMs / POLL_INTERVAL_MS);
+  let numAttempts = 0;
 
   return new Promise<TElement>((resolve, reject) => {
     const intervalId = setInterval(async () => {
@@ -44,25 +44,16 @@ export async function waitUntilElementExists<TElement extends HTMLElement>(
       if (element) {
         clearInterval(intervalId);
         resolve(element);
+        return;
       }
 
-      if (numberOfAttempts >= maxNumberOfAttempts) {
-        reject(`Failed to find element '${selector}' after ${timeoutMilliseconds} milliseconds`);
+      if (numAttempts >= MAX_NUM_ATTEMPTS) {
+        clearInterval(intervalId);
+        reject(`Failed to find element '${selector}' after ${timeoutMs} milliseconds`);
+        return;
       }
 
-      numberOfAttempts++;
-    }, POLL_MILLISECONDS);
+      numAttempts++;
+    }, POLL_INTERVAL_MS);
   });
-}
-
-// Returns an image element (of a random image)
-export function createImage(src: string): HTMLImageElement {
-  const image: HTMLImageElement = document.createElement("img");
-
-  image.src = src;
-  image.width = 150;
-  image.height = 150;
-  image.style.borderRadius = "1em";
-
-  return image;
 }

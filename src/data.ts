@@ -21,8 +21,6 @@ export type TakeawayOrderAddress = {
   townCity: string;
 };
 
-export type TargetSelector = { selector: string; label: string };
-
 export const NAME = "Foodie Fastlane";
 
 export const ALL_TAKEAWAYS: {
@@ -50,7 +48,14 @@ export const ALL_TAKEAWAYS: {
     url: "https://order.fiveguys.co.uk",
     placeOrder: async (order: TakeawayOrder) => {
       const storeId = 171; // TODO: Determine store from order.address
+      const MENU_URL = "https://order.fiveguys.co.uk/menu";
 
+      // If already at the menu page
+      if (window.location.href === MENU_URL) {
+        return;
+      }
+
+      // Otherwise, go to the 'time slot selection' page
       window.location.href = `https://order.fiveguys.co.uk/TimeSlotSelection?storeId=${storeId}&orderType=ClickAndCollect`;
 
       // If the order is not wanted as-soon-as-possible
@@ -71,7 +76,7 @@ export const ALL_TAKEAWAYS: {
           throw new Error(`No time slot found for ${order.time}`);
         }
 
-        // Select the option
+        // Select the 'time slot' option
         timeSlotOption.selected = true;
       }
 
@@ -137,6 +142,3 @@ export const DEFAULT_TAKEAWAYS = ALL_TAKEAWAYS.map(({ name }) => {
 
 export const takeawayCategories = ["Pizza", "Burger", "Sandwich", "Coffee", "Sushi"] as const;
 export const TAKEAWAY_URLS = ALL_TAKEAWAYS.map((takeaway) => takeaway.url);
-
-export const images: string[] = [chrome.runtime.getURL("images/test.jpg")];
-export const allTargetSelectors: TargetSelector[] = [{ selector: "._1cRje", label: "Test" }];

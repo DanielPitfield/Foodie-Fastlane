@@ -1,10 +1,10 @@
 import { ALL_TAKEAWAYS, TakeawayOrder } from "./data";
 
-let placingOrder = false;
+let hasPlacedOrder = false;
 
 async function checkOrder() {
   // Don't place another order (if an order is currently/already being placed)
-  if (placingOrder) {
+  if (hasPlacedOrder) {
     return;
   }
 
@@ -31,8 +31,9 @@ async function checkOrder() {
     time: "ASAP",
   };
 
-  placingOrder = true;
+  
   await matchingTakeaway.placeOrder(order);
+  hasPlacedOrder = true;
 }
 
 const CHECK_INTERVAL_MS = 1000;
