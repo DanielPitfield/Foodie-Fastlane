@@ -2,14 +2,20 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
 import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
-import { ALL_TAKEAWAYS, TakeawayCategory, TakeawayOrder, TakeawayURL } from "../data";
+import { ALL_TAKEAWAYS, NAME, TakeawayCategory, TakeawayOrder, TakeawayURL } from "../data";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
-  const [availableTakeaways, setAvailableTakeaways] =
-    useState<{ name: string; category: TakeawayCategory; url: TakeawayURL, placeOrder: (order: TakeawayOrder) => Promise<void> }[]>();
+  const [availableTakeaways, setAvailableTakeaways] = useState<
+    {
+      name: string;
+      category: TakeawayCategory;
+      url: TakeawayURL;
+      placeOrder: (order: TakeawayOrder) => Promise<void>;
+    }[]
+  >();
   const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);
 
   useEffect(() => {
@@ -34,6 +40,7 @@ const Popup = () => {
   if (targetInfo.isOpen) {
     return (
       <div className="wrapper">
+        <h3 className="title">{NAME}</h3>
         <div className="status" data-is-target-open={targetInfo.isOpen}>
           {`${convertTakeawayURLsToNames(targetInfo.openTakeawayURLs)}`}
         </div>
@@ -46,7 +53,12 @@ const Popup = () => {
 
   // If the available takeaways have not loaded yet
   if (!availableTakeaways) {
-    return <>Loading...</>;
+    return (
+      <>
+        <h3 className="title">{NAME}</h3>
+        Loading...
+      </>
+    );
   }
 
   // Not yet chosen a category
