@@ -1,3 +1,7 @@
+body {
+  padding: 0.4em;
+}
+
 .options {
   font-family: inherit;
   padding: 0.8em;

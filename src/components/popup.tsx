@@ -5,6 +5,7 @@ import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils"
 import { ALL_TAKEAWAYS, NAME, TakeawayCategory, TakeawayURL } from "../data";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
+import { Wrapper } from "./Wrapper";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
@@ -38,45 +39,45 @@ const Popup = () => {
   // There is already an open tab with a takeaway URL
   if (targetInfo.isOpen) {
     return (
-      <div className="wrapper">
-        <h3 className="title">{NAME}</h3>
+      <Wrapper>
         <div className="status" data-is-target-open={targetInfo.isOpen}>
           {`${convertTakeawayURLsToNames(targetInfo.openTakeawayURLs)}`}
         </div>
         <div className="description">{`Auto ordering is available for ${
           targetInfo.openTakeawayURLs.length > 1 ? "these sites!" : "this site!"
         }`}</div>
-      </div>
+      </Wrapper>
     );
   }
 
   // If the available takeaways have not loaded yet
   if (!availableTakeaways) {
     return (
-      <>
+      <Wrapper>
         <h3 className="title">{NAME}</h3>
         Loading...
-      </>
+      </Wrapper>
     );
   }
 
   // Not yet chosen a category
   if (selectedTakeawayCategory === null) {
     return (
-      <TakeawayCategoryList
-        availableTakeaways={availableTakeaways}
-        setSelectedTakeawayCategory={setSelectedTakeawayCategory}
-      />
+      <Wrapper>
+        <TakeawayCategoryList availableTakeaways={availableTakeaways} setSelectedTakeawayCategory={setSelectedTakeawayCategory} />
+      </Wrapper>
     );
   }
 
   // Chosen a category, show the takeaways belonging to that category
   return (
-    <TakeawayList
-      availableTakeaways={availableTakeaways}
-      selectedTakeawayCategory={selectedTakeawayCategory}
-      setSelectedTakeawayCategory={setSelectedTakeawayCategory}
-    />
+    <Wrapper>
+      <TakeawayList
+        availableTakeaways={availableTakeaways}
+        selectedTakeawayCategory={selectedTakeawayCategory}
+        setSelectedTakeawayCategory={setSelectedTakeawayCategory}
+      />
+    </Wrapper>
   );
 };
 

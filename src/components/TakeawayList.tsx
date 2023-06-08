@@ -1,5 +1,5 @@
 import React from "react";
-import { NAME, TakeawayCategory, TakeawayOrder, TakeawayURL } from "../data";
+import { TakeawayCategory, TakeawayURL } from "../data";
 import { Order } from "./order";
 
 interface TakeawayListProps {
@@ -11,8 +11,7 @@ interface TakeawayListProps {
 export const TakeawayList = (props: TakeawayListProps) => {
   // Show the links to the available takeaways of the currently selected takeaway category
   return (
-    <div className="wrapper">
-      <h3 className="title">{NAME}</h3>
+    <>
       <ul className="takeaway-list">
         {props.availableTakeaways
           .filter((takeaway) => takeaway.category === props.selectedTakeawayCategory)
@@ -33,6 +32,6 @@ export const TakeawayList = (props: TakeawayListProps) => {
       <button className="back-button" onClick={() => props.setSelectedTakeawayCategory(null)}>
         Back
       </button>
-    </div>
+    </>
   );
 };
