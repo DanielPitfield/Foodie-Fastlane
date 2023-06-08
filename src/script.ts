@@ -1,16 +1,16 @@
 import { ALL_TAKEAWAYS, TakeawayOrder } from "./data";
 
-let hasPlacedOrder = false;
+async function checkOrder(logger: (message: string) => void) {
+  // Find all takeaways with a stage of the current URL
+  const matchingTakeaways = ALL_TAKEAWAYS.filter(({ placeOrderStages }) =>
+    placeOrderStages.some((stage) => stage.urls.some((url) => window.location.href.startsWith(url)))
+  );
 
-async function checkOrder() {
-  // Don't place another order (if an order is currently/already being placed)
-  if (hasPlacedOrder) {
-    return;
-  }
+  logger(`Found ${matchingTakeaways.length} matching takeaway(s) for URL '${window.location.href}': ${JSON.stringify(matchingTakeaways)}`);
 
-  const matchingTakeaways = ALL_TAKEAWAYS.filter(({ url }) => window.location.href.startsWith(url));
-
+  // If no matching takeaways were found for this URL
   if (matchingTakeaways.length <= 0) {
+    // Exit
     return;
   }
 
@@ -20,21 +20,40 @@ async function checkOrder() {
 
   const matchingTakeaway = matchingTakeaways[0];
 
-  const order: TakeawayOrder = {
-    type: "delivery",
-    address: {
-      street1: "Bournemouth School",
-      street2: "East Way",
-      postCode: "BH8 9PY",
-      townCity: "Bournemouth",
-    },
-    time: "ASAP",
-  };
+  // FInd the stage we are on for this matching takeaway
+  const matchingStage = matchingTakeaway.placeOrderStages.find((stage) => stage.urls.some((url) => window.location.href.startsWith(url)));
 
-  
-  await matchingTakeaway.placeOrder(order);
-  hasPlacedOrder = true;
+  if (!matchingStage) {
+    throw new Error(`Found 0 matching stage for matching takeaway info for this URL`);
+  }
+
+  logger(`Retrieving order from storage`);
+
+  // Retrieve the order from storage
+  const order = JSON.parse((await chrome.storage.sync.get("order"))["order"]) as TakeawayOrder;
+
+  if (!order) {
+    throw new Error(`Failed to retrieve order from storage`);
+  }
+
+  logger(`Placing order for '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${JSON.stringify(order)}`);
+
+  try {
+    // Run the functionality for this stage of the order
+    await matchingStage.placeOrder(order, logger);
+  } catch (error) {
+    logger(`Error occurred in takeaway '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${error}`);
+    throw error;
+  }
+
+  // Save any updates made to the order
+  await chrome.storage.sync.set({ order: JSON.stringify(order) });
 }
 
-const CHECK_INTERVAL_MS = 1000;
-setInterval(checkOrder, CHECK_INTERVAL_MS);
+const logger = (message: string) => {
+  console.info(message);
+
+  // TODO: Send log to server when error occurs (for debugging)
+};
+
+checkOrder(logger);
