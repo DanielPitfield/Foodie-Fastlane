@@ -28,11 +28,35 @@ export function convertTakeawayURLsToNames(takeawayURLs: TakeawayURL[]) {
   );
 }
 
+// Periodically check the active tab's content for the lack of an element with the provided selector
+export async function waitUntilElementDoesNotExist(selector: string, timeoutMs = 10000): Promise<void> {
+  const POLL_INTERVAL_MS = 100;
+  const MAX_NUM_ATTEMPTS = Math.round(timeoutMs / POLL_INTERVAL_MS);
+  let numAttempts = 0;
+
+  return new Promise((resolve, reject) => {
+    const intervalId = setInterval(async () => {
+      const element = document.querySelector(selector);
+
+      if (!element) {
+        clearInterval(intervalId);
+        resolve();
+        return;
+      }
+
+      if (numAttempts >= MAX_NUM_ATTEMPTS) {
+        clearInterval(intervalId);
+        reject(`Element '${selector}' still exists after ${timeoutMs} milliseconds`);
+        return;
+      }
+
+      numAttempts++;
+    }, POLL_INTERVAL_MS);
+  });
+}
+
 // Periodically check the active tab's content for an element with the provided selector
-export async function waitUntilElementExists<TElement extends HTMLElement>(
-  selector: string,
-  timeoutMs = 10000
-): Promise<TElement> {
+export async function waitUntilElementExists<TElement extends HTMLElement>(selector: string, timeoutMs = 10000): Promise<TElement> {
   const POLL_INTERVAL_MS = 100;
   const MAX_NUM_ATTEMPTS = Math.round(timeoutMs / POLL_INTERVAL_MS);
   let numAttempts = 0;
@@ -63,6 +87,28 @@ export function capitaliseFirstLetter(str: string) {
   if (!str) {
     return str;
   }
-  
+
   return `${str[0].toUpperCase()}${str.substring(1)}`;
+}
+
+// Waits for the specified time
+export function delay(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => {
+    const timeoutId = window.setTimeout(() => {
+      window.clearTimeout(timeoutId);
+      resolve();
+    }, milliseconds);
+  });
+}
+
+// Scrolls the entire page height
+export async function scrollPageHeight(): Promise<void> {
+  // Load all elements of the page by scrolling
+  for (let i = 1; i * window.innerHeight < document.body.scrollHeight; i++) {
+    window.scrollTo({ behavior: "smooth", top: i * window.innerHeight });
+    await delay(150);
+  }
+
+  await delay(150);
+  window.scrollTo({ behavior: "smooth", top: 0 });
 }
