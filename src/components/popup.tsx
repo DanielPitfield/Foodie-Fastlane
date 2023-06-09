@@ -2,21 +2,56 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
 import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
-import { ALL_TAKEAWAYS, NAME, TakeawayCategory, TakeawayURL } from "../data";
+import {
+  ALL_TAKEAWAYS,
+  DEFAULT_DOMINOES_ORDER,
+  DEFAULT_FIVE_GUYS_ORDER,
+  DEFAULT_ORDER,
+  NAME,
+  TakeawayCategory,
+  TakeawayName,
+  TakeawayOrder,
+  TakeawayURL,
+} from "../data";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
 import { Wrapper } from "./Wrapper";
+import useOrder from "../hooks/useOrder";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
   const [availableTakeaways, setAvailableTakeaways] = useState<
     {
-      name: string;
+      name: TakeawayName;
       category: TakeawayCategory;
       url: TakeawayURL;
     }[]
   >();
   const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);
+  const [selectedTakeaway, setSelectedTakeaway] = useState<TakeawayName | null>(null);
+
+  const defaultOrder: TakeawayOrder | null = selectedTakeaway
+    ? {
+        "7Bone": null,
+        "Burger King": null,
+        Costa: null,
+        "Domino's Pizza": DEFAULT_DOMINOES_ORDER,
+        Fireaway: null,
+        "Five Guys": DEFAULT_FIVE_GUYS_ORDER,
+        Greggs: null,
+        KFC: null,
+        Leon: null,
+        "McDonald's": null,
+        "Papa John's": null,
+        "Pizza Express": null,
+        "Pizza Hut": null,
+        "Pret a Manger": null,
+        Subway: null,
+        "TGI Fridays": null,
+        Wagamama: null,
+        "Yo! Sushi": null,
+      }[selectedTakeaway]
+    : null;
 
   useEffect(() => {
     (async () => {
@@ -35,6 +70,8 @@ const Popup = () => {
       setAvailableTakeaways(newAvailableTakeaways);
     })();
   }, []);
+
+  useOrder(defaultOrder ?? DEFAULT_ORDER);
 
   // There is already an open tab with a takeaway URL
   if (targetInfo.isOpen) {
@@ -76,6 +113,7 @@ const Popup = () => {
         availableTakeaways={availableTakeaways}
         selectedTakeawayCategory={selectedTakeawayCategory}
         setSelectedTakeawayCategory={setSelectedTakeawayCategory}
+        setSelectedTakeaway={setSelectedTakeaway}
       />
     </Wrapper>
   );

@@ -17,6 +17,7 @@ import { TGI_FRIDAYS } from "./takeaways/tgiFridays";
 import { WAGAMAMA } from "./takeaways/wagamama";
 import { YO_SUSHI } from "./takeaways/yoSushi";
 
+export type TakeawayName = typeof takeawayNames[number];
 export type TakeawayCategory = typeof takeawayCategories[number];
 export type TakeawayURL = typeof TAKEAWAY_URLS[number];
 
@@ -24,7 +25,7 @@ export type PlaceOrderStage = {
   name: string;
   urls: string[];
   placeOrder: (order: TakeawayOrder, logger: (message: string) => void) => Promise<void>;
-}
+};
 
 export type TakeawayOrder = {
   type: "delivery" | "collection";
@@ -45,12 +46,12 @@ export type TakeawayOrderFood = {
   quantity: number;
   status?: "adding-to-cart" | "in-cart";
   options?: TakeawayOrderFood[];
-}
+};
 
 export const NAME = "Foodie Fastlane";
 
 export const ALL_TAKEAWAYS: {
-  name: string;
+  name: TakeawayName;
   category: TakeawayCategory;
   url: string;
   placeOrderStages: PlaceOrderStage[];
@@ -80,8 +81,8 @@ export const DEFAULT_TAKEAWAYS = ALL_TAKEAWAYS.map(({ name }) => {
   return { name, isEnabled: true };
 });
 
-// A test order of 4 burgers and 3 cajun fries
-export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
+// Generic test order with no food
+export const DEFAULT_ORDER: TakeawayOrder = {
   type: "collection",
   address: {
     street1: "Beach",
@@ -90,6 +91,12 @@ export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
     townCity: "Boscombe",
   },
   time: "ASAP",
+  food: [],
+};
+
+// A test order of 4 burgers and 3 cajun fries
+export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
+  ...DEFAULT_ORDER,
   food: [
     {
       name: "Bacon Cheeseburger",
@@ -143,5 +150,84 @@ export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
   ],
 };
 
+// A test order
+export const DEFAULT_DOMINOES_ORDER: TakeawayOrder = {
+  ...DEFAULT_ORDER,
+  food: [
+    {
+      name: "American Hot",
+      quantity: 1,
+      options: [
+        { name: 'Large 13.5"', quantity: 1 },
+        { name: "Classic Crust", quantity: 1 },
+        { name: "Reduced Fat Cheese", quantity: 1 },
+        { name: "Ham", quantity: 1 },
+      ],
+    },
+    {
+      name: "Ham & Pineapple",
+      quantity: 1,
+      options: [{ name: 'Medium 11.5"', quantity: 1 }],
+    },
+    {
+      name: "Plant-Based Margheri-tastic",
+      quantity: 2,
+      options: [],
+    },
+    {
+      name: "Bacon Cheeseburger",
+      quantity: 1,
+      options: [
+        { name: "Fresh Onions", quantity: 1 },
+        { name: "Grilled Mushrooms", quantity: 1 },
+        { name: "Ketchup", quantity: 1 },
+        { name: "Green Peppers", quantity: 1 },
+        { name: "BBQ Sauce", quantity: 1 },
+      ],
+    },
+    {
+      name: "Loaded Wedges - Cheese",
+      quantity: 2,
+    },
+    {
+      name: "Garlic Pizza Bread",
+      quantity: 3,
+    },
+    {
+      name: "Plant-Based Garlic & Herb Dip",
+      quantity: 1,
+    },
+    {
+      name: "Barbecue",
+      quantity: 1,
+    },
+    {
+      name: "Coca-Cola Classic",
+      quantity: 1,
+      options: [{ name: "500ml", quantity: 1 }],
+    },
+  ],
+};
+
 export const takeawayCategories = ["Pizza", "Burger", "Sandwich", "Coffee", "Sushi"] as const;
+export const takeawayNames = [
+  "7Bone",
+  "Burger King",
+  "Costa",
+  "Domino's Pizza",
+  "Fireaway",
+  "Five Guys",
+  "Greggs",
+  "KFC",
+  "Leon",
+  "McDonald's",
+  "Papa John's",
+  "Pizza Express",
+  "Pizza Hut",
+  "Pret a Manger",
+  "Subway",
+  "TGI Fridays",
+  "Wagamama",
+  "Yo! Sushi",
+] as const;
 export const TAKEAWAY_URLS = ALL_TAKEAWAYS.map((takeaway) => takeaway.url);

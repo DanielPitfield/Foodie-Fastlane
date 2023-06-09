@@ -1,11 +1,11 @@
 import React from "react";
-import { DEFAULT_FIVE_GUYS_ORDER, TakeawayCategory, TakeawayURL } from "../data";
-import useOrder from "../hooks/useOrder";
+import { TakeawayCategory, TakeawayName, TakeawayURL } from "../data";
 
 interface TakeawayListProps {
-  availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
+  availableTakeaways: { name: TakeawayName; category: TakeawayCategory; url: TakeawayURL }[];
   selectedTakeawayCategory: TakeawayCategory;
   setSelectedTakeawayCategory: (category: TakeawayCategory | null) => void;
+  setSelectedTakeaway: (takeawayName: TakeawayName | null) => void;
 }
 
 export const TakeawayList = (props: TakeawayListProps) => {
@@ -18,15 +18,19 @@ export const TakeawayList = (props: TakeawayListProps) => {
           .map((takeaway) => {
             return (
               <li key={takeaway.name} className="takeaway-list-item">
-                <a href={takeaway.url} className="takeaway-link" target="_blank" rel="noopener noreferrer">
+                <a
+                  href={takeaway.url}
+                  onClick={() => props.setSelectedTakeaway(takeaway.name)}
+                  className="takeaway-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {takeaway.name}
                 </a>
               </li>
             );
           })}
       </ul>
-
-      {useOrder(DEFAULT_FIVE_GUYS_ORDER)}
 
       <button className="back-button" onClick={() => props.setSelectedTakeawayCategory(null)}>
         Back
