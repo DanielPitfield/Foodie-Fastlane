@@ -17,7 +17,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.fiveguys.co.uk/*"],
+      "matches": ["*://*.fiveguys.co.uk/*", "*://*.dominos.co.uk/*"],
       "js": ["js/vendor.js", "js/content_script.js"]
     }
   ],
