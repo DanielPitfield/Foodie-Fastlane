@@ -26,6 +26,17 @@ async function checkOrder(logger: Logger) {
   const matchingStage = matchingTakeaway.placeOrderStages.find((stage) => stage.urls.some((url) => isCurrentUrlPatternMatch(url)));
 
   if (!matchingStage) {
+    // Find the URL of the first stage (as we may need to navigate to it)
+    const firstStageUrl = matchingTakeaway.placeOrderStages?.[0].urls?.[0];
+
+    // If not already on the URL of the first stage
+    if (new URL(window.location.href).toString() !== new URL(firstStageUrl).toString()) {
+      // Navigate to the first stage's URL
+      window.location.href = firstStageUrl;
+      return;
+    }
+
+    // Else; even after navigating to the first stage, no matching stage could be found
     throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
   }
 
