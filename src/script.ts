@@ -109,9 +109,10 @@ function addBanner(type: "info" | "error", messageContent: string) {
       right: 0 !important;
       bottom: 0 !important;
       z-index: 9999999 !important;
-      height: 36px !important;
+      min-height: 36px !important;
       background-color: #df7503 !important;
       color: #eee !important;
+      padding: 6px !important;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
     }
     
@@ -127,12 +128,18 @@ function addBanner(type: "info" | "error", messageContent: string) {
       margin: 0 !important;
       padding: 0 !important;
       margin-right: 0.5em !important;
-      font-weight: normal !important;
-      text-transform: uppercase !important;
     }
 
     #foodie-fastlane-banner .title {
       font-weight: bold !important;
+      text-transform: uppercase !important;
+      flex-shrink: 0;
+      margin-right: 10px !important;
+    }
+
+    #foodie-fastlane-banner .message {
+      font-weight: normal !important;
+      text-transform: none !important;
     }
   `;
   banner.appendChild(styles);
