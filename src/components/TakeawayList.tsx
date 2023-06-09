@@ -1,6 +1,6 @@
 import React from "react";
-import { TakeawayCategory, TakeawayURL } from "../data";
-import { Order } from "./order";
+import { DEFAULT_FIVE_GUYS_ORDER, TakeawayCategory, TakeawayURL } from "../data";
+import useOrder from "../hooks/useOrder";
 
 interface TakeawayListProps {
   availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
@@ -26,8 +26,7 @@ export const TakeawayList = (props: TakeawayListProps) => {
           })}
       </ul>
 
-      {/** TODO: Move Order to another page, after clicking one of the takeaway-links below */}
-      <Order />
+      {useOrder(DEFAULT_FIVE_GUYS_ORDER)}
 
       <button className="back-button" onClick={() => props.setSelectedTakeawayCategory(null)}>
         Back
