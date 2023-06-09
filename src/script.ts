@@ -40,7 +40,12 @@ async function checkOrder(logger: Logger) {
     throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
   }
 
-  addBanner(matchingTakeaway.placeOrderStages, matchingStage);
+  // What is the name of the current order stage and what number stage is it?
+  const stageProgress = `${matchingStage.name} ${
+    matchingTakeaway.placeOrderStages.findIndex((stage) => stage.name === matchingStage.name) + 1
+  }/${matchingTakeaway.placeOrderStages.length}`;
+
+  addBanner("info", `Your order is being processed (${stageProgress}), please wait...`);
 
   logger("Retrieving order from storage");
 
@@ -57,7 +62,10 @@ async function checkOrder(logger: Logger) {
     // Run the functionality for this stage of the order
     await matchingStage.placeOrder(order, logger);
   } catch (error) {
-    logger(`Error occurred in takeaway '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${error}`);
+    const errorMessage = `Error occurred in takeaway '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${error}`;
+    logger(errorMessage);
+    addBanner("error", errorMessage);
+
     throw error;
   }
 
@@ -66,16 +74,19 @@ async function checkOrder(logger: Logger) {
 }
 
 // Adds a banner to the page, if not already
-function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: PlaceOrderStage) {
+function addBanner(type: "info" | "error", messageContent: string) {
   const BANNER_ID = "foodie-fastlane-banner";
   const existingBanner = document.querySelector<HTMLDivElement>(`#${BANNER_ID}`);
 
   if (existingBanner) {
+    existingBanner.setAttribute("data-type", type);
+    existingBanner.querySelector(".message")!.textContent = messageContent;
     return;
   }
 
   const banner = document.createElement("div");
   banner.id = BANNER_ID;
+  banner.setAttribute("data-type", type);
 
   const title = document.createElement("h4");
   title.className = "title";
@@ -84,21 +95,11 @@ function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: Place
 
   const message = document.createElement("h5");
   message.className = "message";
-
-  // What is the name of the current order stage and what number stage is it?
-  const stageProgress = `${currentOrderStage.name} ${placeOrderStages.findIndex((stage) => stage.name === currentOrderStage.name) + 1}/${
-    placeOrderStages.length
-  }`;
-
-  message.textContent = `Your order is being processed (${stageProgress}), please wait...`;
+  message.textContent = messageContent;
   banner.appendChild(message);
 
   const styles = document.createElement("style");
-  styles.textContent = `  
-    body {
-      margin-top: 36px !important;
-    }
-    
+  styles.textContent = `    
     #foodie-fastlane-banner {
       display: flex !important;
       align-items: center !important;
@@ -112,6 +113,10 @@ function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: Place
       background-color: #df7503 !important;
       color: #eee !important;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+    }
+    
+    #foodie-fastlane-banner[data-type='error'] {
+      background-color: #e70000 !important;
     }
     
     #foodie-fastlane-banner .title,
