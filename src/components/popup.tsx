@@ -4,7 +4,7 @@ import useTargetInfo from "../hooks/useTargetInfo";
 import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
 import {
   ALL_TAKEAWAYS,
-  DEFAULT_DOMINOES_ORDER,
+  DEFAULT_DOMINOS_ORDER,
   DEFAULT_FIVE_GUYS_ORDER,
   DEFAULT_ORDER,
   NAME,
@@ -35,7 +35,7 @@ const Popup = () => {
         "7Bone": null,
         "Burger King": null,
         Costa: null,
-        "Domino's Pizza": DEFAULT_DOMINOES_ORDER,
+        "Domino's Pizza": DEFAULT_DOMINOS_ORDER,
         Fireaway: null,
         "Five Guys": DEFAULT_FIVE_GUYS_ORDER,
         Greggs: null,

@@ -94,10 +94,10 @@ export const DEFAULT_TAKEAWAYS = ALL_TAKEAWAYS.map(({ name }) => {
 export const DEFAULT_ORDER: TakeawayOrder = {
   type: "collection",
   address: {
-    street1: "Beach",
+    street1: "",
     street2: "",
-    postCode: "BH5 1BN",
-    townCity: "Boscombe",
+    postCode: "BH12 4NY", // Poole FiveGuys
+    townCity: "",
   },
   time: "ASAP",
   food: [],
@@ -107,49 +107,75 @@ export const DEFAULT_ORDER: TakeawayOrder = {
 export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
   ...DEFAULT_ORDER,
   food: [
+    // M
     {
       name: "Bacon Cheeseburger",
       quantity: 1,
       options: [
+        { category: "topping", name: "Mayo", quantity: 1 },
+        { category: "topping", name: "Relish", quantity: 1 },
         { category: "topping", name: "Fresh Onions", quantity: 1 },
-        { category: "topping", name: "Pickles", quantity: 1 },
-        { category: "topping", name: "Tomato", quantity: 1 },
         { category: "topping", name: "Grilled Onions", quantity: 1 },
-        { category: "topping", name: "Ketchup", quantity: 1 },
-        { category: "topping", name: "Hot Sauce", quantity: 1 },
+        { category: "topping", name: "Mustard", quantity: 1 },
+        { category: "topping", name: "Green Peppers", quantity: 1 },
+        { category: "topping", name: "Jalapeno Peppers", quantity: 1 },
+        { category: "topping", name: "Tomato", quantity: 1 },
+        { category: "topping", name: "Lettuce Wrap", quantity: 1 },
       ],
     },
+
+    // F
     {
       name: "Bacon Cheeseburger",
       quantity: 1,
       options: [
         { category: "topping", name: "Mayo", quantity: 1 },
         { category: "topping", name: "Fresh Onions", quantity: 1 },
+        { category: "topping", name: "Relish", quantity: 1 },
+        { category: "topping", name: "Grilled Onions", quantity: 1 },
+        { category: "topping", name: "HP Sauce", quantity: 1 },
+        { category: "topping", name: "BBQ Sauce", quantity: 1 },
         { category: "topping", name: "Lettuce", quantity: 1 },
-        { category: "topping", name: "Grilled Onions", quantity: 1 },
-        { category: "topping", name: "BBQ Sauce", quantity: 1 },
-        { category: "topping", name: "Lettuce Wrap", quantity: 1 },
       ],
     },
-    {
-      name: "Cheeseburger",
-      quantity: 1,
-      options: [
-        { category: "topping", name: "Fresh Onions", quantity: 1 },
-        { category: "topping", name: "Grilled Onions", quantity: 1 },
-        { category: "topping", name: "Ketchup", quantity: 1 },
-        { category: "topping", name: "BBQ Sauce", quantity: 1 },
-      ],
-    },
+
+    // B
     {
       name: "Bacon Cheeseburger",
       quantity: 1,
       options: [
+        { category: "topping", name: "Mayo", quantity: 1 },
         { category: "topping", name: "Fresh Onions", quantity: 1 },
-        { category: "topping", name: "Grilled Mushrooms", quantity: 1 },
+        { category: "topping", name: "Pickles", quantity: 1 },
+        { category: "topping", name: "Grilled Onions", quantity: 1 },
         { category: "topping", name: "Ketchup", quantity: 1 },
-        { category: "topping", name: "Green Peppers", quantity: 1 },
+        { category: "topping", name: "Relish", quantity: 1 },
+        { category: "topping", name: "HP Sauce", quantity: 1 },
+        { category: "topping", name: "Jalapeno Peppers", quantity: 1 },
         { category: "topping", name: "BBQ Sauce", quantity: 1 },
+        { category: "topping", name: "Hot Sauce", quantity: 1 },
+        { category: "topping", name: "Tomato", quantity: 1 },
+        { category: "topping", name: "Mustard", quantity: 1 },
+        { category: "topping", name: "Lettuce Wrap", quantity: 1 },
+      ],
+    },
+
+    // D
+    {
+      name: "Bacon Cheeseburger",
+      quantity: 1,
+      options: [
+        { category: "topping", name: "Mayo", quantity: 1 },
+        { category: "topping", name: "Fresh Onions", quantity: 1 },
+        { category: "topping", name: "Pickles", quantity: 1 },
+        { category: "topping", name: "Grilled Onions", quantity: 1 },
+        { category: "topping", name: "Ketchup", quantity: 1 },
+        { category: "topping", name: "Jalapeno Peppers", quantity: 1 },
+        { category: "topping", name: "HP Sauce", quantity: 1 },
+        { category: "topping", name: "Hot Sauce", quantity: 1 },
+        { category: "topping", name: "Relish", quantity: 1 },
+        { category: "topping", name: "Mustard", quantity: 1 },
+        { category: "topping", name: "Green Peppers", quantity: 1 },
       ],
     },
     {
@@ -160,7 +186,7 @@ export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
 };
 
 // A test order
-export const DEFAULT_DOMINOES_ORDER: TakeawayOrder = {
+export const DEFAULT_DOMINOS_ORDER: TakeawayOrder = {
   ...DEFAULT_ORDER,
   food: [
     {
