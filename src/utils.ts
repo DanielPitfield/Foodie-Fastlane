@@ -57,3 +57,12 @@ export async function waitUntilElementExists<TElement extends HTMLElement>(
     }, POLL_INTERVAL_MS);
   });
 }
+
+// Capitalises the first letter of the string
+export function capitaliseFirstLetter(str: string) {
+  if (!str) {
+    return str;
+  }
+  
+  return `${str[0].toUpperCase()}${str.substring(1)}`;
+}
