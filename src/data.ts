@@ -45,7 +45,14 @@ export type TakeawayOrderFood = {
   name: string;
   quantity: number;
   status?: "adding-to-cart" | "in-cart";
-  options?: TakeawayOrderFood[];
+  options?: TakeawayOrderFoodOption[];
+};
+
+export type TakeawayOrderFoodOption = {
+  category: "size" | "topping";
+  name: string;
+  quantity: number;
+  status?: "adding-to-cart" | "in-cart";
 };
 
 export const NAME = "Foodie Fastlane";
@@ -102,45 +109,45 @@ export const DEFAULT_FIVE_GUYS_ORDER: TakeawayOrder = {
       name: "Bacon Cheeseburger",
       quantity: 1,
       options: [
-        { name: "Fresh Onions", quantity: 1 },
-        { name: "Pickles", quantity: 1 },
-        { name: "Tomato", quantity: 1 },
-        { name: "Grilled Onions", quantity: 1 },
-        { name: "Ketchup", quantity: 1 },
-        { name: "Hot Sauce", quantity: 1 },
+        { category: "topping", name: "Fresh Onions", quantity: 1 },
+        { category: "topping", name: "Pickles", quantity: 1 },
+        { category: "topping", name: "Tomato", quantity: 1 },
+        { category: "topping", name: "Grilled Onions", quantity: 1 },
+        { category: "topping", name: "Ketchup", quantity: 1 },
+        { category: "topping", name: "Hot Sauce", quantity: 1 },
       ],
     },
     {
       name: "Bacon Cheeseburger",
       quantity: 1,
       options: [
-        { name: "Mayo", quantity: 1 },
-        { name: "Fresh Onions", quantity: 1 },
-        { name: "Lettuce", quantity: 1 },
-        { name: "Grilled Onions", quantity: 1 },
-        { name: "BBQ Sauce", quantity: 1 },
-        { name: "Lettuce Wrap", quantity: 1 },
+        { category: "topping", name: "Mayo", quantity: 1 },
+        { category: "topping", name: "Fresh Onions", quantity: 1 },
+        { category: "topping", name: "Lettuce", quantity: 1 },
+        { category: "topping", name: "Grilled Onions", quantity: 1 },
+        { category: "topping", name: "BBQ Sauce", quantity: 1 },
+        { category: "topping", name: "Lettuce Wrap", quantity: 1 },
       ],
     },
     {
       name: "Cheeseburger",
       quantity: 1,
       options: [
-        { name: "Fresh Onions", quantity: 1 },
-        { name: "Grilled Onions", quantity: 1 },
-        { name: "Ketchup", quantity: 1 },
-        { name: "BBQ Sauce", quantity: 1 },
+        { category: "topping", name: "Fresh Onions", quantity: 1 },
+        { category: "topping", name: "Grilled Onions", quantity: 1 },
+        { category: "topping", name: "Ketchup", quantity: 1 },
+        { category: "topping", name: "BBQ Sauce", quantity: 1 },
       ],
     },
     {
       name: "Bacon Cheeseburger",
       quantity: 1,
       options: [
-        { name: "Fresh Onions", quantity: 1 },
-        { name: "Grilled Mushrooms", quantity: 1 },
-        { name: "Ketchup", quantity: 1 },
-        { name: "Green Peppers", quantity: 1 },
-        { name: "BBQ Sauce", quantity: 1 },
+        { category: "topping", name: "Fresh Onions", quantity: 1 },
+        { category: "topping", name: "Grilled Mushrooms", quantity: 1 },
+        { category: "topping", name: "Ketchup", quantity: 1 },
+        { category: "topping", name: "Green Peppers", quantity: 1 },
+        { category: "topping", name: "BBQ Sauce", quantity: 1 },
       ],
     },
     {
@@ -158,32 +165,21 @@ export const DEFAULT_DOMINOES_ORDER: TakeawayOrder = {
       name: "American Hot",
       quantity: 1,
       options: [
-        { name: 'Large 13.5"', quantity: 1 },
-        { name: "Classic Crust", quantity: 1 },
-        { name: "Reduced Fat Cheese", quantity: 1 },
-        { name: "Ham", quantity: 1 },
+        { category: "size", name: 'Large 13.5"', quantity: 1 },
+        { category: "topping", name: "Classic Crust", quantity: 1 },
+        { category: "topping", name: "Reduced Fat Cheese", quantity: 1 },
+        { category: "topping", name: "Ham", quantity: 1 },
       ],
     },
     {
       name: "Ham & Pineapple",
       quantity: 1,
-      options: [{ name: 'Medium 11.5"', quantity: 1 }],
+      options: [{ category: "size", name: 'Medium 11.5"', quantity: 1 }],
     },
     {
       name: "Plant-Based Margheri-tastic",
       quantity: 2,
       options: [],
-    },
-    {
-      name: "Bacon Cheeseburger",
-      quantity: 1,
-      options: [
-        { name: "Fresh Onions", quantity: 1 },
-        { name: "Grilled Mushrooms", quantity: 1 },
-        { name: "Ketchup", quantity: 1 },
-        { name: "Green Peppers", quantity: 1 },
-        { name: "BBQ Sauce", quantity: 1 },
-      ],
     },
     {
       name: "Loaded Wedges - Cheese",
@@ -204,7 +200,7 @@ export const DEFAULT_DOMINOES_ORDER: TakeawayOrder = {
     {
       name: "Coca-Cola Classic",
       quantity: 1,
-      options: [{ name: "500ml", quantity: 1 }],
+      options: [{ category: "size", name: "500ml", quantity: 1 }],
     },
   ],
 };
