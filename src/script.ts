@@ -121,15 +121,15 @@ function showBanner(type: "info" | "error" | "success", messageContent: string) 
     }
     
     #foodie-fastlane-banner[data-type='info'] {
-      background:  linear-gradient(90deg, rgba(143,105,46,1) 0%, rgba(230,150,34,1) 59%, rgba(255,246,0,1) 100%) !important;
+      background:  linear-gradient(90deg, rgb(143,105,46) 0%, rgb(230,150,34) 59%, rgb(255,246,0) 100%) !important;
     }
 
     #foodie-fastlane-banner[data-type='error'] {
-      background: linear-gradient(90deg, rgba(143,46,70,1) 0%, rgba(230,34,72,1) 59%, rgba(0,140,255,1) 100%) !important;
+      background: linear-gradient(90deg, rgb(115,0,28) 0%, rgb(230,34,72) 59%, rgb(255,0,151) 100%) !important;
     }
 
     #foodie-fastlane-banner[data-type='success'] {
-      background: linear-gradient(90deg, rgba(63,143,46,1) 0%, rgba(138,230,34,1) 35%, rgba(0,212,255,1) 100%) !important;
+      background: linear-gradient(90deg, rgb(10,57,0) 0%, rgb(105,161,42) 50%, rgb(0,241,255) 100%) !important;
     }
     
     #foodie-fastlane-banner .title,
