@@ -1,4 +1,5 @@
 import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Logger } from "../script";
 import { waitUntilElementExists } from "../utils";
 
 export const FIVE_GUYS: {
@@ -51,7 +52,7 @@ export const FIVE_GUYS: {
     },
     {
       name: "Select Time",
-      urls: ["https://order.fiveguys.co.uk/TimeSlotSelection"],
+      urls: ["https://order.fiveguys.co.uk/TimeSlotSelection*"],
       placeOrder: async (order: TakeawayOrder) => {
         // If the order is not wanted as-soon-as-possible
         if (order.time !== "ASAP") {
@@ -103,21 +104,21 @@ export const FIVE_GUYS: {
     {
       name: "Add Food",
       urls: [
-        "https://order.fiveguys.co.uk/little",
-        "https://order.fiveguys.co.uk/large",
-        "https://order.fiveguys.co.uk/bacon",
-        "https://order.fiveguys.co.uk/cheese",
-        "https://order.fiveguys.co.uk/ham",
-        "https://order.fiveguys.co.uk/hot",
-        "https://order.fiveguys.co.uk/grilled",
-        "https://order.fiveguys.co.uk/veggie",
-        "https://order.fiveguys.co.uk/five-guys-style",
-        "https://order.fiveguys.co.uk/cajun",
-        "https://order.fiveguys.co.uk/milkshake",
-        "https://order.fiveguys.co.uk/soda",
-        "https://order.fiveguys.co.uk/smart-water",
+        "https://order.fiveguys.co.uk/little*",
+        "https://order.fiveguys.co.uk/large*",
+        "https://order.fiveguys.co.uk/bacon*",
+        "https://order.fiveguys.co.uk/cheese*",
+        "https://order.fiveguys.co.uk/ham*",
+        "https://order.fiveguys.co.uk/hot*",
+        "https://order.fiveguys.co.uk/grilled*",
+        "https://order.fiveguys.co.uk/veggie*",
+        "https://order.fiveguys.co.uk/five-guys-style*",
+        "https://order.fiveguys.co.uk/cajun*",
+        "https://order.fiveguys.co.uk/milkshake*",
+        "https://order.fiveguys.co.uk/soda*",
+        "https://order.fiveguys.co.uk/smart-water*",
       ],
-      placeOrder: async (order: TakeawayOrder, logger: (message: string) => void) => {
+      placeOrder: async (order: TakeawayOrder, logger: Logger) => {
         const inProgressItem = order.food.find((food) => food.status === "adding-to-cart");
 
         if (!inProgressItem) {

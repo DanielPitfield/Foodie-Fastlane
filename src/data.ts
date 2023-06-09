@@ -1,3 +1,4 @@
+import { Logger } from "./script";
 import { SEVEN_BONE } from "./takeaways/7Bone";
 import { BURGER_KING } from "./takeaways/burgerKing";
 import { COSTA } from "./takeaways/costa";
@@ -24,7 +25,7 @@ export type TakeawayURL = typeof TAKEAWAY_URLS[number];
 export type PlaceOrderStage = {
   name: string;
   urls: string[];
-  placeOrder: (order: TakeawayOrder, logger: (message: string) => void) => Promise<void>;
+  placeOrder: (order: TakeawayOrder, logger: Logger) => Promise<void>;
 };
 
 export type TakeawayOrder = {

@@ -1,9 +1,12 @@
 import { ALL_TAKEAWAYS, NAME, PlaceOrderStage, TakeawayOrder } from "./data";
 
-async function checkOrder(logger: (message: string) => void) {
+export type Logger = (message: string) => void;
+
+async function checkOrder(logger: Logger) {
   // Find all takeaways with a stage of the current URL
-  const matchingTakeaways = ALL_TAKEAWAYS.filter(({ placeOrderStages }) =>
-    placeOrderStages.some((stage) => stage.urls.some((url) => window.location.href.startsWith(url)))
+  const matchingTakeaways = ALL_TAKEAWAYS.filter(
+    ({ url, placeOrderStages }) =>
+      placeOrderStages.some((stage) => stage.urls.some((stageUrl) => isCurrentUrlPatternMatch(stageUrl))) || isCurrentUrlPatternMatch(url)
   );
 
   logger(`Found ${matchingTakeaways.length} matching takeaway(s) for URL '${window.location.href}': ${JSON.stringify(matchingTakeaways)}`);
@@ -20,7 +23,7 @@ async function checkOrder(logger: (message: string) => void) {
   const matchingTakeaway = matchingTakeaways[0];
 
   // Find the stage we are on for this matching takeaway
-  const matchingStage = matchingTakeaway.placeOrderStages.find((stage) => stage.urls.some((url) => window.location.href.startsWith(url)));
+  const matchingStage = matchingTakeaway.placeOrderStages.find((stage) => stage.urls.some((url) => isCurrentUrlPatternMatch(url)));
 
   if (!matchingStage) {
     throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
@@ -72,9 +75,9 @@ function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: Place
   message.className = "message";
 
   // What is the name of the current order stage and what number stage is it?
-  const stageProgress = `${currentOrderStage.name} ${placeOrderStages.findIndex(
-    (stage) => stage.name === currentOrderStage.name
-  ) + 1}/${placeOrderStages.length}`;
+  const stageProgress = `${currentOrderStage.name} ${placeOrderStages.findIndex((stage) => stage.name === currentOrderStage.name) + 1}/${
+    placeOrderStages.length
+  }`;
 
   message.textContent = `Your order is being processed (${stageProgress}), please wait...`;
   banner.appendChild(message);
@@ -121,7 +124,26 @@ function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: Place
   document.body.insertAdjacentHTML("afterbegin", banner.outerHTML);
 }
 
-const logger = (message: string) => {
+// Determines whether the current URL matches a  URL pattern
+function isCurrentUrlPatternMatch(urlPattern: string): boolean {
+  const currentUrl = window.location.href;
+
+  // If there are no wildcards
+  if (!urlPattern.includes("*")) {
+    // Determine whether the URLs are identical (wrap in new URL to avoid trailing slashes being different)
+    return new URL(currentUrl).toString() === new URL(urlPattern).toString();
+  }
+
+  // If there is an ending wildcard
+  if (urlPattern.endsWith("*")) {
+    return currentUrl.startsWith(urlPattern.substring(0, urlPattern.length - 1));
+  }
+
+  throw new Error(`URL pattern '${urlPattern}' is not supported, the '*' must be the last character`);
+}
+
+// Logger
+const logger: Logger = (message: string) => {
   console.info(message);
 
   // TODO: Send log to server when error occurs (for debugging)
