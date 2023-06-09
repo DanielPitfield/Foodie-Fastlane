@@ -1,15 +1,11 @@
-import { TakeawayCategory, TakeawayOrder } from "../data";
+import { PlaceOrderStage, TakeawayCategory, TakeawayOrder } from "../data";
 import { waitUntilElementExists } from "../utils";
 
 export const FIVE_GUYS: {
   name: string;
   category: TakeawayCategory;
   url: string;
-  placeOrderStages: {
-    name: string;
-    urls: string[];
-    placeOrder: (order: TakeawayOrder, logger: (message: string) => void) => Promise<void>;
-  }[];
+  placeOrderStages: PlaceOrderStage[];
 } = {
   name: "Five Guys",
   category: "Burger",
@@ -43,7 +39,7 @@ export const FIVE_GUYS: {
     {
       name: "Select Store",
       urls: ["https://order.fiveguys.co.uk/StoreSelection"],
-      placeOrder: async () => {
+      placeOrder: async (order: TakeawayOrder) => {
         const firstStoreLink = await waitUntilElementExists<HTMLAnchorElement>("[id^=store] a[href^='/TimeSlotSelection']");
 
         if (!firstStoreLink) {

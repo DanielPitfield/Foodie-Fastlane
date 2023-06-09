@@ -20,6 +20,12 @@ import { YO_SUSHI } from "./takeaways/yoSushi";
 export type TakeawayCategory = typeof takeawayCategories[number];
 export type TakeawayURL = typeof TAKEAWAY_URLS[number];
 
+export type PlaceOrderStage = {
+  name: string;
+  urls: string[];
+  placeOrder: (order: TakeawayOrder, logger: (message: string) => void) => Promise<void>;
+}
+
 export type TakeawayOrder = {
   type: "delivery" | "collection";
   address: TakeawayOrderAddress;
@@ -47,11 +53,7 @@ export const ALL_TAKEAWAYS: {
   name: string;
   category: TakeawayCategory;
   url: string;
-  placeOrderStages: {
-    name: string;
-    urls: string[];
-    placeOrder: (order: TakeawayOrder, logger: (message: string) => void) => Promise<void>;
-  }[];
+  placeOrderStages: PlaceOrderStage[];
 }[] = [
   MC_DONALDS,
   KFC,

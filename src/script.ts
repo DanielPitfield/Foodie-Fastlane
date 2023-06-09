@@ -1,4 +1,4 @@
-import { ALL_TAKEAWAYS, NAME, TakeawayOrder } from "./data";
+import { ALL_TAKEAWAYS, NAME, PlaceOrderStage, TakeawayOrder } from "./data";
 
 async function checkOrder(logger: (message: string) => void) {
   // Find all takeaways with a stage of the current URL
@@ -26,7 +26,7 @@ async function checkOrder(logger: (message: string) => void) {
     throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
   }
 
-  addBanner();
+  addBanner(matchingTakeaway.placeOrderStages, matchingStage);
 
   logger("Retrieving order from storage");
 
@@ -52,7 +52,7 @@ async function checkOrder(logger: (message: string) => void) {
 }
 
 // Adds a banner to the page, if not already
-function addBanner() {
+function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: PlaceOrderStage) {
   const BANNER_ID = "foodie-fastlane-banner";
   const existingBanner = document.querySelector<HTMLDivElement>(`#${BANNER_ID}`);
 
@@ -70,11 +70,17 @@ function addBanner() {
 
   const message = document.createElement("h5");
   message.className = "message";
-  message.textContent = "Your order is being processed, please wait";
+
+  // What is the name of the current order stage and what number stage is it?
+  const stageProgress = `${currentOrderStage.name} ${placeOrderStages.findIndex(
+    (stage) => stage.name === currentOrderStage.name
+  )}/${placeOrderStages.length}`;
+
+  message.textContent = `Your order is being processed (${stageProgress}), please wait...`;
   banner.appendChild(message);
 
   const styles = document.createElement("style");
-  styles.textContent= `  
+  styles.textContent = `  
     body {
       margin-top: 36px !important;
     }
