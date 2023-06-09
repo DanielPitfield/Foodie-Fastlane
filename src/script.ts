@@ -74,7 +74,7 @@ function addBanner(placeOrderStages: PlaceOrderStage[], currentOrderStage: Place
   // What is the name of the current order stage and what number stage is it?
   const stageProgress = `${currentOrderStage.name} ${placeOrderStages.findIndex(
     (stage) => stage.name === currentOrderStage.name
-  )}/${placeOrderStages.length}`;
+  ) + 1}/${placeOrderStages.length}`;
 
   message.textContent = `Your order is being processed (${stageProgress}), please wait...`;
   banner.appendChild(message);
