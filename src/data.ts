@@ -33,6 +33,7 @@ export type TakeawayOrder = {
   address: TakeawayOrderAddress;
   time: "ASAP" | Date;
   food: TakeawayOrderFood[];
+  isComplete?: true;
 };
 
 export type TakeawayOrderAddress = {
@@ -184,19 +185,19 @@ export const DEFAULT_DOMINOES_ORDER: TakeawayOrder = {
     },
     {
       name: "Loaded Wedges - Cheese",
-      quantity: 2,
+      quantity: 1,
     },
     {
       name: "Garlic Pizza Bread",
-      quantity: 3,
+      quantity: 2,
     },
     {
       name: "Plant-Based Garlic & Herb Dip",
-      quantity: 1,
+      quantity: 3,
     },
     {
       name: "Barbecue",
-      quantity: 1,
+      quantity: 2,
     },
     {
       name: "Coca-Cola Classic",

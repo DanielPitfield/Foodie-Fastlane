@@ -84,18 +84,18 @@ export const FIVE_GUYS: {
     {
       name: "Select Food",
       urls: ["https://order.fiveguys.co.uk/menu"],
-      placeOrder: async (order: TakeawayOrder) => {
+      placeOrder: async (order: TakeawayOrder, logger: Logger) => {
         // Find the next item without a status (that hasn't been processed yet)
         const nextItem = order.food.find((food) => food.status === undefined);
 
         if (!nextItem) {
-          // TODO: Click 'Checkout'
+          order.isComplete = true;
           return;
         }
 
         nextItem.status = "adding-to-cart";
 
-        const { link } = await findFoodItemElement(nextItem.name);
+        const { link } = await findFoodItemElement(nextItem.name, logger);
 
         // Open the page
         link.click();
@@ -147,7 +147,7 @@ export const FIVE_GUYS: {
         for (const option of inProgressItem.options ?? []) {
           logger(`Adding option '${option.name}'`);
 
-          const { element } = await findFoodOptionElement(option.name);
+          const { element } = await findFoodOptionElement(option.name, logger);
 
           // Check the option
           if (option.quantity >= 1) {
@@ -169,7 +169,7 @@ export const FIVE_GUYS: {
 };
 
 // Finds a matching food item (e.g. "Cheeseburger", "Bacon Cheeseburger")
-async function findFoodItemElement(name: string): Promise<{ name: string; link: HTMLAnchorElement }> {
+async function findFoodItemElement(name: string, logger: Logger): Promise<{ name: string; link: HTMLAnchorElement }> {
   // Ensure the food items have loaded
   await waitUntilElementExists(".items-box a");
 
@@ -188,11 +188,13 @@ async function findFoodItemElement(name: string): Promise<{ name: string; link: 
     );
   }
 
+  logger(`Found matching food item element '${name}'`);
+
   return foodItemElement;
 }
 
 // Finds a matching food option element (e.g. "Tomato", "Mayo", "Lettuce" etc.)
-async function findFoodOptionElement(name: string): Promise<{ name: string; element: HTMLLabelElement }> {
+async function findFoodOptionElement(name: string, logger: Logger): Promise<{ name: string; element: HTMLLabelElement }> {
   // Ensure the food options have loaded
   await waitUntilElementExists("label[for^='product_attribute']");
 
@@ -216,6 +218,8 @@ async function findFoodOptionElement(name: string): Promise<{ name: string; elem
         .join(", ")}`
     );
   }
+
+  logger(`Found matching food option element '${name}'`);
 
   return foodOptionElement;
 }
