@@ -1,4 +1,4 @@
-import { ALL_TAKEAWAYS, TakeawayOrder } from "./data";
+import { ALL_TAKEAWAYS, NAME, TakeawayOrder } from "./data";
 
 async function checkOrder(logger: (message: string) => void) {
   // Find all takeaways with a stage of the current URL
@@ -10,7 +10,6 @@ async function checkOrder(logger: (message: string) => void) {
 
   // If no matching takeaways were found for this URL
   if (matchingTakeaways.length <= 0) {
-    // Exit
     return;
   }
 
@@ -20,22 +19,22 @@ async function checkOrder(logger: (message: string) => void) {
 
   const matchingTakeaway = matchingTakeaways[0];
 
-  // FInd the stage we are on for this matching takeaway
+  // Find the stage we are on for this matching takeaway
   const matchingStage = matchingTakeaway.placeOrderStages.find((stage) => stage.urls.some((url) => window.location.href.startsWith(url)));
 
   if (!matchingStage) {
-    throw new Error(`Found 0 matching stage for matching takeaway info for this URL`);
+    throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
   }
 
   addBanner();
 
-  logger(`Retrieving order from storage`);
+  logger("Retrieving order from storage");
 
   // Retrieve the order from storage
   const order = JSON.parse((await chrome.storage.sync.get("order"))["order"]) as TakeawayOrder;
 
   if (!order) {
-    throw new Error(`Failed to retrieve order from storage`);
+    throw new Error("Failed to retrieve order from storage");
   }
 
   logger(`Placing order for '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${JSON.stringify(order)}`);
@@ -66,7 +65,7 @@ function addBanner() {
 
   const title = document.createElement("h4");
   title.className = "title";
-  title.textContent = "Foodie Fastlane";
+  title.textContent = NAME;
   banner.appendChild(title);
 
   const message = document.createElement("h5");

@@ -37,7 +37,7 @@ export type TakeawayOrderAddress = {
 export type TakeawayOrderFood = {
   name: string;
   quantity: number;
-  status?: "adding-to-cart" | "added-to-cart";
+  status?: "adding-to-cart" | "in-cart";
   options?: TakeawayOrderFood[];
 }
 

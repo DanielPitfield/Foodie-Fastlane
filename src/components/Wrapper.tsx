@@ -1,7 +1,11 @@
 import React from "react";
 import { NAME } from "../data";
 
-export const Wrapper: (props: { children: React.ReactNode }) => JSX.Element = (props) => {
+interface WrapperProps {
+  children?: React.ReactNode;
+}
+
+export const Wrapper = (props: WrapperProps) => {
   return (
     <div className="wrapper">
       <header>

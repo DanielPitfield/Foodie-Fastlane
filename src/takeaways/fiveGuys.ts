@@ -24,18 +24,33 @@ export const FIVE_GUYS: {
         }
 
         const searchInput = await waitUntilElementExists<HTMLInputElement>("input#txtfindpostcode");
+
+        if (!searchInput) {
+          throw new Error("Could not find the 'Postcode Search' input");
+        }
+
         searchInput.value = order.address.postCode;
 
         const submitButton = await waitUntilElementExists<HTMLButtonElement>("button#btnfind");
+
+        if (!submitButton) {
+          throw new Error("Could not find the 'Find/Submit' button");
+        }
+
         submitButton.click();
       },
     },
     {
       name: "Select Store",
       urls: ["https://order.fiveguys.co.uk/StoreSelection"],
-      placeOrder: async (order: TakeawayOrder) => {
-        const firstStore = await waitUntilElementExists<HTMLAnchorElement>("[id^=store] a[href^='/TimeSlotSelection']");
-        firstStore.click();
+      placeOrder: async () => {
+        const firstStoreLink = await waitUntilElementExists<HTMLAnchorElement>("[id^=store] a[href^='/TimeSlotSelection']");
+
+        if (!firstStoreLink) {
+          throw new Error("Could not find the any store to collect from");
+        }
+
+        firstStoreLink.click();
       },
     },
     {
@@ -73,7 +88,8 @@ export const FIVE_GUYS: {
       name: "Select Food",
       urls: ["https://order.fiveguys.co.uk/menu"],
       placeOrder: async (order: TakeawayOrder) => {
-        const nextItem = order.food.find((food) => !food.status);
+        // Find the next item without a status (that hasn't been processed yet)
+        const nextItem = order.food.find((food) => food.status === undefined);
 
         if (!nextItem) {
           // TODO: Click 'Checkout'
@@ -109,29 +125,34 @@ export const FIVE_GUYS: {
         const inProgressItem = order.food.find((food) => food.status === "adding-to-cart");
 
         if (!inProgressItem) {
-          throw new Error(`Failed to find item current being added to cart`);
+          throw new Error("Failed to find the current item being added to the cart");
         }
 
         logger(`Configuring food item '${inProgressItem.name}'`);
 
-        // If the quantity is greater than 1
-        for (let currentQuantity = 1; currentQuantity < inProgressItem.quantity; currentQuantity++) {
+        if (inProgressItem.quantity > 1) {
           const increaseQuantityButton = await waitUntilElementExists<HTMLButtonElement>(".totalcount button.btn-plus");
 
-          // Increase the quantity by 1
-          logger(`Incrementing quantity`);
-          increaseQuantityButton.click();
+          if (!increaseQuantityButton) {
+            throw new Error("Could not find the 'Increase Quantity' button");
+          }
+
+          for (let currentQuantity = 1; currentQuantity < inProgressItem.quantity; currentQuantity++) {
+            // Increase the quantity by 1
+            logger(`Incrementing quantity`);
+            increaseQuantityButton.click();
+          }
+
+          logger(`Successfully set quantity to '${inProgressItem.quantity}'`);
         }
 
-        logger(`Successfully set quantity to '${inProgressItem.quantity}'`);
-
         // For each option on this food item
-        for (const option of inProgressItem.options || []) {
+        for (const option of inProgressItem.options ?? []) {
           logger(`Adding option '${option.name}'`);
 
           const { element } = await findFoodOptionElement(option.name);
 
-          // Check the option if the quantity is 1
+          // Check the option
           if (option.quantity >= 1) {
             element.click();
           }
@@ -139,11 +160,11 @@ export const FIVE_GUYS: {
           logger(`Successfully added option '${option.name}'`);
         }
 
-        inProgressItem.status = "added-to-cart";
-        
-        // Find the 'Add to Cart' button
+        inProgressItem.status = "in-cart";
+
         const addToCartButton = await waitUntilElementExists<HTMLButtonElement>("button[id^='add-to-cart']");
         addToCartButton.click();
+
         logger(`Successfully added food item '${inProgressItem.name}' to cart`);
       },
     },
@@ -157,7 +178,7 @@ async function findFoodItemElement(name: string): Promise<{ name: string; link: 
 
   // Find all food item elements, and the names of the products (i.e. "Cheeseburger", "Bacon Cheeseburger")
   const foodItemElements = Array.from(document.querySelectorAll<HTMLAnchorElement>(".items-box a")).map((link) => ({
-    name: link.querySelector(".product-title")?.textContent || "",
+    name: link.querySelector(".product-title")?.textContent ?? "",
     link,
   }));
 
@@ -181,7 +202,9 @@ async function findFoodOptionElement(name: string): Promise<{ name: string; elem
   // Find all food option elements (e.g. "Tomato", "Mayo", "Lettuce" etc.)
   const foodOptionElements = Array.from(document.querySelectorAll<HTMLLabelElement>("label[for^='product_attribute']")).map((element) => {
     // Get the label text e.g. "Grilled Onions (12 kcal)"
-    const name = (element.textContent || "").substring(0, (element.textContent || "").indexOf(" (")).trim(); // Trim the calories e.g. "())12 kcal)", and remove excess whitespace
+    const labelText = element.textContent ?? "";
+    // Trim the calories e.g. "(12 kcal)" and remove excess whitespace
+    const name = labelText.substring(0, labelText.indexOf(" (")).trim();
 
     return { name, element };
   });
