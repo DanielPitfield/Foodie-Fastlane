@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { TakeawayOrder } from "../data";
+import { TakeawayOrder } from "../data/DefaultOrders";
 
 function useOrder(order: TakeawayOrder) {
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { TakeawayCategory, TakeawayName } from "../data";
+import { TakeawayCategory, TakeawayName } from "../data/AllTakeaways";
 
 interface TakeawayListProps {
   availableTakeaways: { name: TakeawayName; category: TakeawayCategory; url: URL }[];

@@ -1,5 +1,5 @@
 import React from "react";
-import { NAME } from "../data";
+import { NAME } from "../data/Other";
 
 interface WrapperProps {
   children?: React.ReactNode;

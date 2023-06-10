@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "../data";
+import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "../data/AllTakeaways";
 import { getTargetTakeaways } from "../utils";
 
 const Options = () => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ALL_TAKEAWAYS } from "../data";
+import { ALL_TAKEAWAYS } from "../data/AllTakeaways";
 
 // Which of the supported takeaway websites are open within the current window (if any)?
 function useTargetInfo() {

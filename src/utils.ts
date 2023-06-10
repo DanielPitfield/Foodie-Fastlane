@@ -1,4 +1,5 @@
-import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "./data";
+import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS, TakeawayName } from "./data/AllTakeaways";
+import { ALL_DEFAULT_ORDERS, DEFAULT_ORDER, TakeawayOrder } from "./data/DefaultOrders";
 
 // Get the target takeways which are enabled in the options
 export async function getTargetTakeaways(): Promise<{ name: string; isEnabled: boolean }[]> {
@@ -14,8 +15,17 @@ export async function getTargetTakeaways(): Promise<{ name: string; isEnabled: b
   return DEFAULT_TAKEAWAYS;
 }
 
+// Get the default order for the provided takeaway
+export function getDefaultOrder(takeawayName: TakeawayName | null): TakeawayOrder {
+  if (!takeawayName) {
+    return DEFAULT_ORDER;
+  }
+
+  return ALL_DEFAULT_ORDERS?.[takeawayName] ?? DEFAULT_ORDER;
+}
+
 // Returns a comma seperated list of the names corresponding to the provided takeaway URLs
-export function convertTakeawayURLsToNames(takeawayURLs: URL[]) {
+export function convertTakeawayURLsToNames(takeawayURLs: URL[]): string {
   return (
     takeawayURLs
       // Find the name for the URL
@@ -81,7 +91,7 @@ export async function waitUntilElementExists<TElement extends HTMLElement>(selec
 }
 
 // Capitalises the first letter of the string
-export function capitaliseFirstLetter(str: string) {
+export function capitaliseFirstLetter(str: string): string {
   if (!str) {
     return str;
   }
@@ -90,7 +100,7 @@ export function capitaliseFirstLetter(str: string) {
 }
 
 // Waits for the specified time
-export function delay(milliseconds: number): Promise<void> {
+export async function delay(milliseconds: number): Promise<void> {
   return new Promise((resolve) => {
     const timeoutId = window.setTimeout(() => {
       window.clearTimeout(timeoutId);

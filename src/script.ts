@@ -1,6 +1,6 @@
-import { ALL_TAKEAWAYS, NAME, TakeawayOrder } from "./data";
-
-export type Logger = (message: string) => void;
+import { ALL_TAKEAWAYS } from "./data/AllTakeaways";
+import { TakeawayOrder } from "./data/DefaultOrders";
+import { Logger, NAME } from "./data/Other";
 
 async function checkOrder(logger: Logger) {
   // Find all takeaways with a stage of the current URL

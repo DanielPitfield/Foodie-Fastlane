@@ -1,6 +1,7 @@
-import { Takeaway, TakeawayOrder } from "../data";
-import { Logger } from "../script";
-import { waitUntilElementExists } from "../utils";
+import { Takeaway } from "../AllTakeaways";
+import { TakeawayOrder } from "../DefaultOrders";
+import { waitUntilElementExists } from "../../utils";
+import { Logger } from "../Other";
 
 export const FIVE_GUYS: Takeaway = {
   name: "Five Guys",

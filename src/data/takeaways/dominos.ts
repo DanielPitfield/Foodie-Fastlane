@@ -1,6 +1,7 @@
-import { Takeaway, TakeawayOrder } from "../data";
-import { Logger } from "../script";
-import { capitaliseFirstLetter, scrollPageHeight, waitUntilElementDoesNotExist, waitUntilElementExists } from "../utils";
+import { Takeaway } from "../AllTakeaways";
+import { TakeawayOrder } from "../DefaultOrders";
+import { capitaliseFirstLetter, scrollPageHeight, waitUntilElementDoesNotExist, waitUntilElementExists } from "../../utils";
+import { Logger } from "../Other";
 
 export const DOMINOS: Takeaway = {
   name: "Domino's Pizza",

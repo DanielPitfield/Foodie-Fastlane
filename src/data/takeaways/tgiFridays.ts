@@ -1,5 +1,5 @@
-import { Takeaway } from "../data";
-import { waitUntilElementExists } from "../utils";
+import { Takeaway } from "../AllTakeaways";
+import { waitUntilElementExists } from "../../utils";
 
 export const TGI_FRIDAYS: Takeaway = {
   name: "TGI Fridays",
