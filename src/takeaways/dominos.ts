@@ -1,12 +1,6 @@
 import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
 import { Logger } from "../script";
-import {
-  capitaliseFirstLetter,
-  delay,
-  scrollPageHeight as scrollDownThenUp,
-  waitUntilElementDoesNotExist,
-  waitUntilElementExists,
-} from "../utils";
+import { capitaliseFirstLetter, delay, scrollPageHeight, waitUntilElementDoesNotExist, waitUntilElementExists } from "../utils";
 
 export const DOMINOS: {
   name: TakeawayName;
@@ -22,30 +16,29 @@ export const DOMINOS: {
       name: "Find Store",
       urls: ["https://www.dominos.co.uk/storefinder"],
       placeOrder: async (order: TakeawayOrder, logger: Logger) => {
-        // Build the URL query string parameters to the 'S'tore Finder' page
-        const storeUrlParameters = new URLSearchParams([
+        // Build the URL query string parameters to the 'Store Finder' page
+        const storeURLParameters = new URLSearchParams([
           ["fulfilment", capitaliseFirstLetter(order.type)],
           ["searchterm", order.address.postCode],
           ["successUrl", "/menu"],
         ]);
 
-        const storeUrl = `https://www.dominos.co.uk/storefinder/search?${storeUrlParameters}`;
-
-        window.location.href = storeUrl;
+        const storeURL = `https://www.dominos.co.uk/storefinder/search?${storeURLParameters}`;
+        window.location.href = storeURL;
       },
     },
     {
       name: "Select Store",
       urls: ["https://www.dominos.co.uk/storefinder/search*"],
       placeOrder: async (order: TakeawayOrder) => {
-        const firstStoreCssSelector = {
+        const firstStoreSelector = {
           // For a 'collection' order, find the 'collect-button'
           collection: ".base-store-card[data-store-status='Online'] button[class*='collect-button']",
           // For a 'delivery' order, find the 'delivery-button'
           delivery: ".base-store-card[data-store-status='Online'] button[class*='delivery-button']",
         }[order.type];
 
-        const firstStoreLink = await waitUntilElementExists<HTMLAnchorElement>(firstStoreCssSelector);
+        const firstStoreLink = await waitUntilElementExists<HTMLAnchorElement>(firstStoreSelector);
 
         if (!firstStoreLink) {
           throw new Error("Could not find the any store to collect from");
@@ -58,7 +51,10 @@ export const DOMINOS: {
       name: "Select Food",
       urls: ["https://www.dominos.co.uk/store/*"],
       placeOrder: async (order: TakeawayOrder, logger: Logger) => {
-        let pageFullyLoaded = false;
+        // Load all food items on the page (because many items are only loaded when scrolled to)
+        if (order.food.some((food) => food.status === undefined)) {
+          await loadAllFoodItems();
+        }
 
         while (true) {
           // Find the next item without a status (that hasn't been processed yet)
@@ -67,12 +63,6 @@ export const DOMINOS: {
           if (!nextItem) {
             window.location.href = "https://www.dominos.co.uk/basketdetails/show";
             return;
-          }
-
-          if (!pageFullyLoaded) {
-            // Load all food items on the page (as many are only loaded when scrolled to)
-            await loadAllFoodItems();
-            pageFullyLoaded = true;
           }
 
           nextItem.status = "adding-to-cart";
@@ -109,7 +99,7 @@ export const DOMINOS: {
       placeOrder: async (order: TakeawayOrder) => {
         order.isComplete = true;
       },
-    }
+    },
   ],
 };
 
@@ -122,16 +112,12 @@ async function loadAllFoodItems() {
   document.querySelector<HTMLButtonElement>("button[data-ref-id='menu-button']")?.click();
 
   // Load all elements of the page by scrolling
-  await scrollDownThenUp();
+  await scrollPageHeight();
 
   // Expand all food item groups
   Array.from(document.querySelectorAll<HTMLButtonElement>("button[data-ref-id='base-menu-card__group-button']")).forEach((el) =>
     el.click()
   );
-
-  await delay(250);
-
-  window.scrollTo({ behavior: "smooth", top: 0 });
 }
 
 // Finds a matching food item (e.g. "American Hot", "Pepperoni Passion")

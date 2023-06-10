@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "../data";
-import useTargetInfo from "../hooks/useTargetInfo";
-import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
+import { getEnabledTargetTakeaways } from "../utils";
 
 const Options = () => {
-  const targetInfo = useTargetInfo();
-
   const [targetTakeaways, setTargetTakeaways] = useState<{ name: string; isEnabled: boolean }[]>(DEFAULT_TAKEAWAYS);
   const [status, setStatus] = useState<string>("");
 
@@ -19,12 +16,7 @@ const Options = () => {
 
   // Update status message to show options have been saved
   function showConfirmation() {
-    if (targetInfo.isOpen) {
-      // Instruct the user to refresh the open takeaway tabs
-      setStatus(`Options saved. Refresh ${convertTakeawayURLsToNames(targetInfo.openTakeawayURLs)}`);
-    } else {
-      setStatus("Options saved. Refresh.");
-    }
+    setStatus("Options saved.");
 
     // Clear status message
     const id = setTimeout(() => {
