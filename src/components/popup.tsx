@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import useTargetInfo from "../hooks/useTargetInfo";
-import { convertTakeawayURLsToNames, getEnabledTargetTakeaways } from "../utils";
+import { convertTakeawayURLsToNames, getTargetTakeaways } from "../utils";
 import {
   ALL_TAKEAWAYS,
   DEFAULT_DOMINOS_ORDER,
@@ -55,8 +55,8 @@ const Popup = () => {
 
   useEffect(() => {
     (async () => {
-      // Get the names of the enabled takeaways
-      const enabledTakeaways = await getEnabledTargetTakeaways();
+      const targetTakeaways = await getTargetTakeaways();
+      const enabledTakeaways = targetTakeaways.filter((option) => option.isEnabled);
 
       // Get the entire information for the takeaways
       const newAvailableTakeaways = enabledTakeaways

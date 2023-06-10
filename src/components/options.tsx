@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "../data";
-import { getEnabledTargetTakeaways } from "../utils";
+import { getTargetTakeaways } from "../utils";
 
 const Options = () => {
   const [targetTakeaways, setTargetTakeaways] = useState<{ name: string; isEnabled: boolean }[]>(DEFAULT_TAKEAWAYS);
@@ -10,7 +10,7 @@ const Options = () => {
   // Restores the state of the enabled takeaways (using the preferences stored in chrome.storage)
   useEffect(() => {
     (async () => {
-      setTargetTakeaways(await getEnabledTargetTakeaways());
+      setTargetTakeaways(await getTargetTakeaways());
     })();
   }, []);
 
@@ -29,7 +29,7 @@ const Options = () => {
   // Saves options to chrome.storage
   async function saveOptions() {
     await chrome.storage.sync.set({
-      targetTakeways: JSON.stringify(targetTakeaways),
+      targetTakeaways: JSON.stringify(targetTakeaways),
     });
 
     showConfirmation();
