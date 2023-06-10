@@ -36,15 +36,13 @@ const Options = () => {
   }
 
   function toggleOption(name: string) {
-    // Find the option being changed in targetTakeaways
-    const changedOption = targetTakeaways.find((option) => option.name === name);
+    const newTargetTakeaways = targetTakeaways.slice();
+    const changedOption = newTargetTakeaways.find((option) => option.name === name);
 
-    // Toggle enabled status
     if (changedOption) {
+      // Toggle enabled status
       changedOption.isEnabled = !changedOption.isEnabled;
-
-      // Update state with the new option
-      setTargetTakeaways([...targetTakeaways.filter((option) => option.name !== name), changedOption]);
+      setTargetTakeaways(newTargetTakeaways);
     }
   }
 
@@ -52,7 +50,6 @@ const Options = () => {
     <>
       <div className="options">
         <h3 className="title">Takeaways</h3>
-        <p>Select which takeways are automatically ordered</p>
         {ALL_TAKEAWAYS.map(({ name }) => (
           <label key={name} className="option">
             <input
@@ -67,7 +64,9 @@ const Options = () => {
       </div>
 
       {status && <div className="status">{status}</div>}
-      <button onClick={saveOptions}>Save</button>
+      <button className="save-button" onClick={saveOptions}>
+        Save
+      </button>
     </>
   );
 };
