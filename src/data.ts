@@ -18,9 +18,16 @@ import { TGI_FRIDAYS } from "./takeaways/tgiFridays";
 import { WAGAMAMA } from "./takeaways/wagamama";
 import { YO_SUSHI } from "./takeaways/yoSushi";
 
+export type Takeaway = {
+  name: TakeawayName;
+  category: TakeawayCategory;
+  url: URL;
+  placeOrderStages: PlaceOrderStage[];
+  saveOrder?: () => Promise<void>;
+}
+
 export type TakeawayName = typeof takeawayNames[number];
 export type TakeawayCategory = typeof takeawayCategories[number];
-export type TakeawayURL = typeof TAKEAWAY_URLS[number];
 
 export type PlaceOrderStage = {
   name: string;
@@ -59,12 +66,7 @@ export type TakeawayOrderFoodOption = {
 
 export const NAME = "Foodie Fastlane";
 
-export const ALL_TAKEAWAYS: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-}[] = [
+export const ALL_TAKEAWAYS: Takeaway[] = [
   MC_DONALDS,
   KFC,
   BURGER_KING,
@@ -254,4 +256,3 @@ export const takeawayNames = [
   "Wagamama",
   "Yo! Sushi",
 ] as const;
-export const TAKEAWAY_URLS = ALL_TAKEAWAYS.map((takeaway) => takeaway.url);

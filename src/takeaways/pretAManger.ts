@@ -1,14 +1,9 @@
-import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Takeaway } from "../data";
 import { waitUntilElementExists } from "../utils";
 
-export const PRET_A_MANGER: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-} = {
+export const PRET_A_MANGER: Takeaway = {
   name: "Pret a Manger",
   category: "Sandwich",
-  url: "https://www.pret.co.uk",
+  url: new URL("https://www.pret.co.uk"),
   placeOrderStages: [],
 };

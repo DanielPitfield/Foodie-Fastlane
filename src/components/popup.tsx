@@ -8,10 +8,10 @@ import {
   DEFAULT_FIVE_GUYS_ORDER,
   DEFAULT_ORDER,
   NAME,
+  Takeaway,
   TakeawayCategory,
   TakeawayName,
   TakeawayOrder,
-  TakeawayURL,
 } from "../data";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
@@ -20,13 +20,7 @@ import useOrder from "../hooks/useOrder";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
-  const [availableTakeaways, setAvailableTakeaways] = useState<
-    {
-      name: TakeawayName;
-      category: TakeawayCategory;
-      url: TakeawayURL;
-    }[]
-  >();
+  const [availableTakeaways, setAvailableTakeaways] = useState<Takeaway[]>();
   const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);
   const [selectedTakeaway, setSelectedTakeaway] = useState<TakeawayName | null>(null);
 

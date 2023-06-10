@@ -1,16 +1,11 @@
-import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Takeaway, TakeawayOrder } from "../data";
 import { Logger } from "../script";
 import { waitUntilElementExists } from "../utils";
 
-export const FIVE_GUYS: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-} = {
+export const FIVE_GUYS: Takeaway = {
   name: "Five Guys",
   category: "Burger",
-  url: "https://order.fiveguys.co.uk",
+  url: new URL("https://order.fiveguys.co.uk"),
   placeOrderStages: [
     {
       name: "Find Store",
@@ -166,6 +161,26 @@ export const FIVE_GUYS: {
       },
     },
   ],
+  saveOrder: async () => {
+    // TODO: Get the key value pairs of the shopping cart form and construct a TakeawayOrder object to save
+    const ShoppingCartForm = document.querySelector<HTMLFormElement>("#shopping-cart-form");
+
+    if (!ShoppingCartForm) {
+      throw new Error("Could not find the shopping cart/basket");
+    }
+
+    ShoppingCartForm.addEventListener("submit", (e) => {
+      //e.preventDefault();
+
+      // Construct a FormData object, which fires the formdata event
+      const formData = new FormData(ShoppingCartForm);
+    });
+
+    ShoppingCartForm.addEventListener("formdata", (e) => {
+      const formData = e.formData;
+      console.log(formData.entries());
+    });
+  },
 };
 
 // Finds a matching food item (e.g. "Cheeseburger", "Bacon Cheeseburger")

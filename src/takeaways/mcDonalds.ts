@@ -1,14 +1,9 @@
-import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Takeaway } from "../data";
 import { waitUntilElementExists } from "../utils";
 
-export const MC_DONALDS: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-} = {
+export const MC_DONALDS: Takeaway = {
   name: "McDonald's",
   category: "Burger",
-  url: "https://www.mcdonalds.co.uk",
+  url: new URL("https://www.mcdonalds.co.uk"),
   placeOrderStages: [],
 };

@@ -1,8 +1,8 @@
 import React from "react";
-import { TakeawayCategory, TakeawayName, TakeawayURL } from "../data";
+import { TakeawayCategory, TakeawayName } from "../data";
 
 interface TakeawayListProps {
-  availableTakeaways: { name: TakeawayName; category: TakeawayCategory; url: TakeawayURL }[];
+  availableTakeaways: { name: TakeawayName; category: TakeawayCategory; url: URL }[];
   selectedTakeawayCategory: TakeawayCategory;
   setSelectedTakeawayCategory: (category: TakeawayCategory | null) => void;
   setSelectedTakeaway: (takeawayName: TakeawayName | null) => void;
@@ -19,7 +19,7 @@ export const TakeawayList = (props: TakeawayListProps) => {
             return (
               <li key={takeaway.name} className="takeaway-list-item">
                 <a
-                  href={takeaway.url}
+                  href={takeaway.url.toString()}
                   onClick={() => props.setSelectedTakeaway(takeaway.name)}
                   className="takeaway-link"
                   target="_blank"

@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
-import { TAKEAWAY_URLS, TakeawayURL } from "../data";
+import { ALL_TAKEAWAYS } from "../data";
 
 // Which of the supported takeaway websites are open within the current window (if any)?
 function useTargetInfo() {
-  const [targetInfo, setTargetInfo] = useState<{ isOpen: false } | { isOpen: true; openTakeawayURLs: TakeawayURL[] }>({
+  const [targetInfo, setTargetInfo] = useState<{ isOpen: false } | { isOpen: true; openTakeawayURLs: URL[] }>({
     isOpen: false,
   });
 
   useEffect(() => {
     chrome.tabs.query({ currentWindow: true }, (tabs) => {
-      const openTakeawayURLs = TAKEAWAY_URLS.filter((URL) => tabs.some((tab) => (tab.url ?? "-").startsWith(URL)));
+      const openTakeawayURLs: URL[] = ALL_TAKEAWAYS.filter((takeaway) =>
+        tabs.some((tab) => (tab.url ?? "-").startsWith(takeaway.url.toString()))
+      ).map((takeaway) => takeaway.url);
+      
       setTargetInfo(openTakeawayURLs.length > 0 ? { isOpen: true, openTakeawayURLs } : { isOpen: false });
     });
   }, []);

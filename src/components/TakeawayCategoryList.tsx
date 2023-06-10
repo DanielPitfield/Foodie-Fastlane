@@ -1,8 +1,8 @@
 import React from "react";
-import { TakeawayCategory, TakeawayURL, takeawayCategories } from "../data";
+import { TakeawayCategory, takeawayCategories } from "../data";
 
 interface TakeawayCategoryListProps {
-  availableTakeaways: { name: string; category: TakeawayCategory; url: TakeawayURL }[];
+  availableTakeaways: { name: string; category: TakeawayCategory; url: URL }[];
   setSelectedTakeawayCategory: (category: TakeawayCategory | null) => void;
 }
 

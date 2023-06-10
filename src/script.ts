@@ -1,4 +1,4 @@
-import { ALL_TAKEAWAYS, NAME, PlaceOrderStage, TakeawayOrder } from "./data";
+import { ALL_TAKEAWAYS, NAME, TakeawayOrder } from "./data";
 
 export type Logger = (message: string) => void;
 
@@ -6,7 +6,7 @@ async function checkOrder(logger: Logger) {
   // Find all takeaways with a stage of the current URL
   const matchingTakeaways = ALL_TAKEAWAYS.filter(
     ({ url, placeOrderStages }) =>
-      placeOrderStages.some((stage) => stage.urls.some((stageUrl) => isCurrentUrlPatternMatch(stageUrl))) || isCurrentUrlPatternMatch(url)
+      placeOrderStages.some((stage) => stage.urls.some((stageUrl) => isCurrentUrlPatternMatch(stageUrl))) || isCurrentUrlPatternMatch(url.toString())
   );
 
   logger(`Found ${matchingTakeaways.length} matching takeaway(s) for URL '${window.location.href}': ${JSON.stringify(matchingTakeaways)}`);
@@ -32,7 +32,7 @@ async function checkOrder(logger: Logger) {
     // If not already on the URL of the first stage
     if (new URL(window.location.href).toString() !== new URL(firstStageUrl).toString()) {
       // Navigate to the first stage's URL
-      window.location.href = firstStageUrl;
+      window.location.href = firstStageUrl.toString();
       return;
     }
 

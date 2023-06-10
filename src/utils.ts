@@ -1,4 +1,4 @@
-import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS, TakeawayURL } from "./data";
+import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "./data";
 
 // Get the target takeways which are enabled in the options
 export async function getTargetTakeaways(): Promise<{ name: string; isEnabled: boolean }[]> {
@@ -15,7 +15,7 @@ export async function getTargetTakeaways(): Promise<{ name: string; isEnabled: b
 }
 
 // Returns a comma seperated list of the names corresponding to the provided takeaway URLs
-export function convertTakeawayURLsToNames(takeawayURLs: TakeawayURL[]) {
+export function convertTakeawayURLsToNames(takeawayURLs: URL[]) {
   return (
     takeawayURLs
       // Find the name for the URL

@@ -1,16 +1,11 @@
-import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Takeaway, TakeawayOrder } from "../data";
 import { Logger } from "../script";
-import { capitaliseFirstLetter, delay, scrollPageHeight, waitUntilElementDoesNotExist, waitUntilElementExists } from "../utils";
+import { capitaliseFirstLetter, scrollPageHeight, waitUntilElementDoesNotExist, waitUntilElementExists } from "../utils";
 
-export const DOMINOS: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-} = {
+export const DOMINOS: Takeaway = {
   name: "Domino's Pizza",
   category: "Pizza",
-  url: "https://www.dominos.co.uk",
+  url: new URL("https://www.dominos.co.uk"),
   placeOrderStages: [
     {
       name: "Find Store",

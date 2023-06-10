@@ -1,14 +1,9 @@
-import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Takeaway } from "../data";
 import { waitUntilElementExists } from "../utils";
 
-export const TGI_FRIDAYS: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-} = {
+export const TGI_FRIDAYS: Takeaway = {
   name: "TGI Fridays",
   category: "Burger",
-  url: "https://www.tgifridays.co.uk",
+  url: new URL("https://www.tgifridays.co.uk"),
   placeOrderStages: [],
 };

@@ -1,14 +1,9 @@
-import { PlaceOrderStage, TakeawayCategory, TakeawayName, TakeawayOrder } from "../data";
+import { Takeaway } from "../data";
 import { waitUntilElementExists } from "../utils";
 
-export const PAPA_JOHNS: {
-  name: TakeawayName;
-  category: TakeawayCategory;
-  url: string;
-  placeOrderStages: PlaceOrderStage[];
-} = {
+export const PAPA_JOHNS: Takeaway = {
   name: "Papa John's",
   category: "Pizza",
-  url: "https://www.papajohns.co.uk",
+  url: new URL("https://www.papajohns.co.uk"),
   placeOrderStages: [],
 };
