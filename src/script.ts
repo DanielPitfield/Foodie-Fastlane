@@ -3,10 +3,24 @@ import { TakeawayOrder } from "./data/DefaultOrders";
 import { Logger, NAME } from "./data/Other";
 
 async function checkOrder(logger: Logger) {
+  logger("Retrieving order from storage");
+
+  // Retrieve the order from storage
+  const order = JSON.parse((await chrome.storage.sync.get("order"))["order"]) as TakeawayOrder;
+
+  if (!order) {
+    throw new Error("Failed to retrieve order from storage");
+  }
+
+  if (order.isComplete) {
+    return;
+  }
+
   // Find all takeaways with a stage of the current URL
   const matchingTakeaways = ALL_TAKEAWAYS.filter(
     ({ url, placeOrderStages }) =>
-      placeOrderStages.some((stage) => stage.urls.some((stageUrl) => isCurrentUrlPatternMatch(stageUrl))) || isCurrentUrlPatternMatch(url.toString())
+      placeOrderStages.some((stage) => stage.urls.some((stageUrl) => isCurrentUrlPatternMatch(stageUrl))) ||
+      isCurrentUrlPatternMatch(url.toString())
   );
 
   logger(`Found ${matchingTakeaways.length} matching takeaway(s) for URL '${window.location.href}': ${JSON.stringify(matchingTakeaways)}`);
@@ -36,7 +50,7 @@ async function checkOrder(logger: Logger) {
       return;
     }
 
-    // Else; even after navigating to the first stage, no matching stage could be found
+    // Even after navigating to the first stage, no matching stage could be found
     throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
   }
 
@@ -46,15 +60,6 @@ async function checkOrder(logger: Logger) {
   }/${matchingTakeaway.placeOrderStages.length}`;
 
   showBanner("info", `Your order is being processed (${stageProgress}), please wait...`);
-
-  logger("Retrieving order from storage");
-
-  // Retrieve the order from storage
-  const order = JSON.parse((await chrome.storage.sync.get("order"))["order"]) as TakeawayOrder;
-
-  if (!order) {
-    throw new Error("Failed to retrieve order from storage");
-  }
 
   logger(`Placing order for '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${JSON.stringify(order)}`);
 
