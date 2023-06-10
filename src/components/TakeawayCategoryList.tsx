@@ -12,6 +12,11 @@ export const TakeawayCategoryList = (props: TakeawayCategoryListProps) => {
     props.availableTakeaways.some((takeaway) => takeaway.category === category)
   );
 
+  // There are no takeaway categories to show (liekly due to no takeaways being enabled)
+  if (availableCategories.length <= 0) {
+    return <>Enable takeaways in the options</>;
+  }
+
   // Show the available takeaway categories
   return (
     <ul className="takeaway-category-list">
