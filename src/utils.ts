@@ -1,8 +1,8 @@
-import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS, TakeawayName } from "./data/AllTakeaways";
+import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS, Takeaway, TakeawayName } from "./data/AllTakeaways";
 import { ALL_DEFAULT_ORDERS, DEFAULT_ORDER, TakeawayOrder } from "./data/DefaultOrders";
 
 // Get the target takeways which are enabled in the options
-export async function getTargetTakeaways(): Promise<{ name: string; isEnabled: boolean }[]> {
+export async function getTargetTakeaways(): Promise<{ name: TakeawayName; isEnabled: boolean }[]> {
   const item = await chrome.storage.sync.get("targetTakeaways");
 
   // If a storage entry exists
@@ -16,12 +16,12 @@ export async function getTargetTakeaways(): Promise<{ name: string; isEnabled: b
 }
 
 // Get the default order for the provided takeaway
-export function getDefaultOrder(takeawayName: TakeawayName | null): TakeawayOrder {
-  if (!takeawayName) {
+export function getDefaultOrder(takeaway: Takeaway | null): TakeawayOrder {
+  if (!takeaway || !takeaway.name) {
     return DEFAULT_ORDER;
   }
 
-  return ALL_DEFAULT_ORDERS?.[takeawayName] ?? DEFAULT_ORDER;
+  return ALL_DEFAULT_ORDERS?.[takeaway.name] ?? DEFAULT_ORDER;
 }
 
 // Returns a comma seperated list of the names corresponding to the provided takeaway URLs

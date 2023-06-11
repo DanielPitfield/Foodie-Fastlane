@@ -1,11 +1,11 @@
 import React from "react";
-import { TakeawayCategory, TakeawayName } from "../data/AllTakeaways";
+import { Takeaway, TakeawayCategory } from "../data/AllTakeaways";
 
 interface TakeawayListProps {
-  availableTakeaways: { name: TakeawayName; category: TakeawayCategory; url: URL }[];
+  availableTakeaways: Takeaway[];
   selectedTakeawayCategory: TakeawayCategory;
   setSelectedTakeawayCategory: (category: TakeawayCategory | null) => void;
-  setSelectedTakeaway: (takeawayName: TakeawayName | null) => void;
+  setSelectedTakeaway: (takeaway: Takeaway | null) => void;
 }
 
 export const TakeawayList = (props: TakeawayListProps) => {
@@ -20,7 +20,7 @@ export const TakeawayList = (props: TakeawayListProps) => {
               <li key={takeaway.name} className="takeaway-list-item">
                 <a
                   href={takeaway.url.toString()}
-                  onClick={() => props.setSelectedTakeaway(takeaway.name)}
+                  onClick={() => props.setSelectedTakeaway(takeaway)}
                   className="takeaway-link"
                   target="_blank"
                   rel="noopener noreferrer"

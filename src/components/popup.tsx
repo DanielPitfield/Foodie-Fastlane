@@ -3,16 +3,16 @@ import { createRoot } from "react-dom/client";
 import { Wrapper } from "./Wrapper";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
-import { ALL_TAKEAWAYS, Takeaway, TakeawayCategory, TakeawayName } from "../data/AllTakeaways";
+import { ALL_TAKEAWAYS, Takeaway, TakeawayCategory } from "../data/AllTakeaways";
 import { convertTakeawayURLsToNames, getDefaultOrder, getTargetTakeaways } from "../utils";
 import useTargetInfo from "../hooks/useTargetInfo";
 import useOrder from "../hooks/useOrder";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
-  const [availableTakeaways, setAvailableTakeaways] = useState<Takeaway[]>();
+  const [availableTakeaways, setAvailableTakeaways] = useState<Takeaway[]>([]);
   const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);
-  const [selectedTakeaway, setSelectedTakeaway] = useState<TakeawayName | null>(null);
+  const [selectedTakeaway, setSelectedTakeaway] = useState<Takeaway | null>(null);
 
   useEffect(() => {
     (async () => {

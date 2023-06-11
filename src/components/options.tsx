@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS } from "../data/AllTakeaways";
+import { ALL_TAKEAWAYS, DEFAULT_TAKEAWAYS, TakeawayName } from "../data/AllTakeaways";
 import { getTargetTakeaways } from "../utils";
 
 const Options = () => {
-  const [targetTakeaways, setTargetTakeaways] = useState<{ name: string; isEnabled: boolean }[]>(DEFAULT_TAKEAWAYS);
+  const [targetTakeaways, setTargetTakeaways] = useState<{ name: TakeawayName; isEnabled: boolean }[]>(DEFAULT_TAKEAWAYS);
   const [status, setStatus] = useState<string>("");
 
   // Restores the state of the enabled takeaways (using the preferences stored in chrome.storage)
@@ -35,7 +35,7 @@ const Options = () => {
     showConfirmation();
   }
 
-  function toggleOption(name: string) {
+  function toggleTakeawayOption(name: TakeawayName) {
     const newTargetTakeaways = targetTakeaways.slice();
     const changedOption = newTargetTakeaways.find((option) => option.name === name);
 
@@ -56,7 +56,7 @@ const Options = () => {
             type="checkbox"
             className="option-checkbox"
             checked={targetTakeaways.some((option) => option.name === name && option.isEnabled)}
-            onClick={() => toggleOption(name)}
+            onClick={() => toggleTakeawayOption(name)}
           />
           <span className="option-text">{name}</span>
         </label>
