@@ -16,12 +16,11 @@ body {
 .option {
   display: flex;
   margin: 0.5em 0;
-  cursor: pointer;
   align-items: center;
 }
 
 .option-checkbox {
-  margin-right: 0.4em;
+  margin-right: 0.5em;
 }
 
 .status {
