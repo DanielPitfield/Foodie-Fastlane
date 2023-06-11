@@ -1,4 +1,6 @@
 import { PlaceOrderStage } from "./DefaultOrders";
+import { Logger } from "./Other";
+
 import { SEVEN_BONE } from "./takeaways/7Bone";
 import { BURGER_KING } from "./takeaways/burgerKing";
 import { COSTA } from "./takeaways/costa";
@@ -24,7 +26,7 @@ export type Takeaway = {
   url: URL;
   showProgress?: true;
   placeOrderStages: PlaceOrderStage[];
-  saveOrder?: () => Promise<void>;
+  saveOrder?: (logger: Logger) => Promise<void>;
 };
 
 export type TakeawayName = typeof takeawayNames[number];

@@ -162,25 +162,8 @@ export const FIVE_GUYS: Takeaway = {
       },
     },
   ],
-  saveOrder: async () => {
+  saveOrder: async (logger: Logger) => {
     // TODO: Get the key value pairs of the shopping cart form and construct a TakeawayOrder object to save
-    const ShoppingCartForm = document.querySelector<HTMLFormElement>("#shopping-cart-form");
-
-    if (!ShoppingCartForm) {
-      throw new Error("Could not find the shopping cart/basket");
-    }
-
-    ShoppingCartForm.addEventListener("submit", (e) => {
-      //e.preventDefault();
-
-      // Construct a FormData object, which fires the formdata event
-      const formData = new FormData(ShoppingCartForm);
-    });
-
-    ShoppingCartForm.addEventListener("formdata", (e) => {
-      const formData = e.formData;
-      console.log(formData.entries());
-    });
   },
 };
 
