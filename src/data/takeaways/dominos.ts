@@ -7,6 +7,7 @@ export const DOMINOS: Takeaway = {
   name: "Domino's Pizza",
   category: "Pizza",
   url: new URL("https://www.dominos.co.uk"),
+  showProgress: true,
   placeOrderStages: [
     {
       name: "Find Store",

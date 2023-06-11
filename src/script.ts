@@ -54,12 +54,16 @@ async function checkOrder(logger: Logger) {
     throw new Error("Could not find any matching stage for the matching takeaway info of this URL");
   }
 
-  // What is the name of the current order stage and what number stage is it?
-  const stageProgress = `${matchingStage.name} ${
-    matchingTakeaway.placeOrderStages.findIndex((stage) => stage.name === matchingStage.name) + 1
-  }/${matchingTakeaway.placeOrderStages.length}`;
+  if (matchingTakeaway.showProgress) {
+    // What is the name of the current order stage and what number stage is it?
+    const stageProgress = `${matchingStage.name} ${
+      matchingTakeaway.placeOrderStages.findIndex((stage) => stage.name === matchingStage.name) + 1
+    }/${matchingTakeaway.placeOrderStages.length}`;
 
-  showBanner("info", `Your order is being processed (${stageProgress}), please wait...`);
+    showBanner("info", `Your order is being processed (${stageProgress}), please wait...`);
+  } else {
+    showBanner("info", `Your order is being processed, please wait...`);
+  }
 
   logger(`Placing order for '${matchingTakeaway.name}' at stage '${matchingStage.name}': ${JSON.stringify(order)}`);
 

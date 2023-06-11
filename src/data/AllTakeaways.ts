@@ -22,6 +22,7 @@ export type Takeaway = {
   name: TakeawayName;
   category: TakeawayCategory;
   url: URL;
+  showProgress?: true;
   placeOrderStages: PlaceOrderStage[];
   saveOrder?: () => Promise<void>;
 };
