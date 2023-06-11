@@ -47,27 +47,27 @@ const Options = () => {
   }
 
   return (
-    <>
-      <div className="options">
-        <h3 className="title">Takeaways</h3>
-        {ALL_TAKEAWAYS.map(({ name }) => (
-          <label key={name} className="option">
-            <input
-              type="checkbox"
-              className="option-checkbox"
-              checked={targetTakeaways.some((option) => option.name === name && option.isEnabled)}
-              onClick={() => toggleOption(name)}
-            />
-            <span className="option-text">{name}</span>
-          </label>
-        ))}
-      </div>
+    <section className="options">
+      <h3 className="title">Takeaways</h3>
+
+      {ALL_TAKEAWAYS.map(({ name }) => (
+        <label key={name} className="option">
+          <input
+            type="checkbox"
+            className="option-checkbox"
+            checked={targetTakeaways.some((option) => option.name === name && option.isEnabled)}
+            onClick={() => toggleOption(name)}
+          />
+          <span className="option-text">{name}</span>
+        </label>
+      ))}
 
       {status && <div className="status">{status}</div>}
+
       <button className="save-button" onClick={saveOptions}>
         Save
       </button>
-    </>
+    </section>
   );
 };
 
