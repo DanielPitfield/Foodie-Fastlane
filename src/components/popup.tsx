@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Wrapper } from "./Wrapper";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
-import { ALL_TAKEAWAYS, Takeaway, TakeawayCategory } from "../data/AllTakeaways";
+import { ALL_TAKEAWAYS, Takeaway, TakeawayCategory, TakeawayName } from "../data/AllTakeaways";
 import { convertTakeawayURLsToNames, getDefaultOrder, getTargetTakeaways } from "../utils";
 import useTargetInfo from "../hooks/useTargetInfo";
 import useOrder from "../hooks/useOrder";
@@ -17,18 +17,10 @@ const Popup = () => {
   useEffect(() => {
     (async () => {
       const targetTakeaways = await getTargetTakeaways();
-      const enabledTakeaways = targetTakeaways.filter((option) => option.isEnabled);
+      // What are the names of the takeaways which are enabled in the options?
+      const enabledTakeawayNames: TakeawayName[] = targetTakeaways.filter((option) => option.isEnabled).map((option) => option.name);
 
-      // Get the entire information for the takeaways
-      const newAvailableTakeaways = enabledTakeaways
-        // Map each option to its takeaway info (URL, category etc.)
-        .map((enabledTakeaway) => ALL_TAKEAWAYS.find((takeaway) => takeaway.name === enabledTakeaway.name))
-        // Filter out options which could not be mapped
-        .filter((x) => x)
-        // Tell TypeScript there are no undefined values
-        .map((x) => x!);
-
-      setAvailableTakeaways(newAvailableTakeaways);
+      setAvailableTakeaways(ALL_TAKEAWAYS.filter((takeaway) => enabledTakeawayNames.includes(takeaway.name)));
     })();
   }, []);
 
