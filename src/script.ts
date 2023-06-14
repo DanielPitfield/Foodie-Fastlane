@@ -84,6 +84,50 @@ async function checkOrder(logger: Logger) {
   if (order.isComplete) {
     showBanner("success", "Order successfully placed, please check your order");
   }
+
+  // TODO: ShowImprovements() function with switch statement of takeways's name?
+  // Currently at the basket/checkout page for Domino's?
+  if (matchingTakeaway.name === "Domino's Pizza" && isCurrentUrlPatternMatch(matchingTakeaway.placeOrderStages.at(-1)?.urls[0] ?? "")) {
+    const basketContainer = document.querySelector<HTMLElement>(".basket-feature-container");
+
+    if (!basketContainer) {
+      throw new Error("Could not find basket container");
+    }
+
+    basketContainer.style.cssText += "display: flex; justify-content: space-between; margin-bottom: 0.5em";
+
+    const ApplyDealButton = document.querySelector<HTMLButtonElement>(".basket-deal__deal-wizard-btn");
+    // TODO: There is also a 'RemoveDeal' button
+
+    // Improve the 'Apply Deal Wizard' button styling (make it easier to spot)
+    if (ApplyDealButton) {
+      ApplyDealButton.classList.add("base-button");
+      ApplyDealButton.classList.add("base-button--primary");
+    }
+
+    // Add a 'Clear Basket' button to this section
+    const ClearBasketButton = document.createElement("button");
+    ClearBasketButton.className = "base-button base-button--primary";
+    ClearBasketButton.style.cssText += "background-color: red; border-color: red";
+    ClearBasketButton.textContent = "Clear Basket";
+    ClearBasketButton.addEventListener("click", () => {
+      // Click the remove button for every item
+      // TODO: Some items do not get removed
+      Array.from(document.querySelectorAll<HTMLButtonElement>("button.basket-deal__remove-button.basket-deal__spaced-button")).forEach(
+        (el) => {
+          el.click();
+
+          const AcceptButton = document.querySelectorAll<HTMLButtonElement>("button.btn.base-button--info.btn-positive.btn-large")[1];
+
+          if (AcceptButton) {
+            AcceptButton.click();
+          }
+        }
+      );
+    });
+
+    basketContainer.append(ClearBasketButton);
+  }
 }
 
 // Adds/updates a banner on the page
