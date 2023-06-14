@@ -109,7 +109,7 @@ async function loadAllFoodItems() {
   document.querySelector<HTMLButtonElement>("button[data-ref-id='menu-button']")?.click();
 
   // Load all elements of the page by scrolling
-  await scrollPageHeight();
+  await scrollPageHeight(500);
 
   // Expand all food item groups
   Array.from(document.querySelectorAll<HTMLButtonElement>("button[data-ref-id='base-menu-card__group-button']")).forEach((el) =>

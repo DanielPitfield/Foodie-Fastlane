@@ -110,13 +110,12 @@ export async function delay(milliseconds: number): Promise<void> {
 }
 
 // Scrolls the entire page height
-export async function scrollPageHeight(): Promise<void> {
+export async function scrollPageHeight(delayMs: number): Promise<void> {
   // Load all elements of the page by scrolling
   for (let i = 1; i * window.innerHeight < document.body.scrollHeight; i++) {
     window.scrollTo({ behavior: "smooth", top: i * window.innerHeight });
-    await delay(150);
+    await delay(delayMs);
   }
 
-  await delay(150);
   window.scrollTo({ behavior: "smooth", top: 0 });
 }
