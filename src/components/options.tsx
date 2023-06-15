@@ -50,7 +50,7 @@ const Options = () => {
     <section className="options">
       <h3 className="title">Takeaways</h3>
 
-      {ALL_TAKEAWAYS.map(({ name }) => (
+      {ALL_TAKEAWAYS.filter((takeaway) => takeaway.placeOrderStages.length > 0).map(({ name }) => (
         <label key={name} className="option">
           <input
             type="checkbox"

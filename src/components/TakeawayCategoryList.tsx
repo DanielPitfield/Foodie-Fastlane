@@ -9,7 +9,7 @@ interface TakeawayCategoryListProps {
 export const TakeawayCategoryList = (props: TakeawayCategoryListProps) => {
   // Which takeaway categories have atleast one takeaway which is enabled?
   const availableCategories = takeawayCategories.filter((category) =>
-    props.availableTakeaways.some((takeaway) => takeaway.category === category)
+    props.availableTakeaways.some((takeaway) => takeaway.category === category && takeaway.placeOrderStages.length > 0)
   );
 
   // There are no takeaway categories to show (liekly due to no takeaways being enabled)

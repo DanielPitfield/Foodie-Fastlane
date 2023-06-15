@@ -14,7 +14,7 @@ export const TakeawayList = (props: TakeawayListProps) => {
     <>
       <ul className="takeaway-list">
         {props.availableTakeaways
-          .filter((takeaway) => takeaway.category === props.selectedTakeawayCategory)
+          .filter((takeaway) => takeaway.category === props.selectedTakeawayCategory && takeaway.placeOrderStages.length > 0)
           .map((takeaway) => {
             return (
               <li key={takeaway.name} className="takeaway-list-item">
