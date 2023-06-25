@@ -5,6 +5,7 @@ export type PlaceOrderStage = {
   name: string;
   urls: string[];
   placeOrder: (order: TakeawayOrder, logger: Logger) => Promise<void>;
+  skipPageNavigation?: true;
 };
 
 export type TakeawayOrder = {
@@ -179,6 +180,46 @@ const DEFAULT_DOMINOS_ORDER: TakeawayOrder = {
   ],
 };
 
+// A test order
+const DEFAULT_PAPA_JOHNS_ORDER: TakeawayOrder = {
+  ...DEFAULT_ORDER,
+  food: [
+    {
+      name: "Chicken, Pesto and Mushroom",
+      quantity: 1,
+      options: [
+        { category: "size", name: 'XXL Original', quantity: 1 },
+      ],
+    },
+    {
+      name: "American Hot",
+      quantity: 1,
+      options: [{ category: "size", name: 'Large Authentic Thin Crust', quantity: 1 }],
+    },
+    {
+      name: "Potato Tots",
+      quantity: 1,
+    },
+    {
+      name: "Garlic Pizza Sticks",
+      quantity: 2,
+    },
+    {
+      name: "Special Garlic",
+      quantity: 3,
+    },
+    {
+      name: "BBQ",
+      quantity: 2,
+    },
+    {
+      name: "Pepsi Max",
+      quantity: 1,
+      options: [{ category: "size", name: "1.5l Bottle", quantity: 1 }],
+    },
+  ],
+};
+
 export const ALL_DEFAULT_ORDERS: Partial<Record<TakeawayName, TakeawayOrder | null>> = {
   "7Bone": null,
   "Burger King": null,
@@ -190,7 +231,7 @@ export const ALL_DEFAULT_ORDERS: Partial<Record<TakeawayName, TakeawayOrder | nu
   "KFC": null,
   "Leon": null,
   "McDonald's": null,
-  "Papa John's": null,
+  "Papa John's": DEFAULT_PAPA_JOHNS_ORDER,
   "Pizza Express": null,
   "Pizza Hut": null,
   "Pret a Manger": null,

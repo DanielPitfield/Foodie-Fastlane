@@ -67,10 +67,10 @@ export const DOMINOS: Takeaway = {
           const { addToCartButton, selectSize } = await findFoodItemElement(nextItem.name, logger);
 
           // Find a size option for this food item (if any)
-          const sizeFoodOption = nextItem.options?.find((x) => x.category === "size");
+          const FoodSize = nextItem.options?.find((x) => x.category === "size");
 
-          if (sizeFoodOption) {
-            await selectSize(sizeFoodOption.name);
+          if (FoodSize) {
+            await selectSize(FoodSize.name);
           }
 
           // Add the food item

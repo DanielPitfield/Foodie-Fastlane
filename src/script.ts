@@ -1,6 +1,7 @@
 import { ALL_TAKEAWAYS } from "./data/AllTakeaways";
 import { TakeawayOrder } from "./data/DefaultOrders";
 import { Logger, NAME } from "./data/Other";
+import { delay } from "./utils";
 
 async function checkOrder(logger: Logger) {
   logger("Retrieving order from storage");
@@ -76,10 +77,19 @@ async function checkOrder(logger: Logger) {
     showBanner("error", errorMessage);
 
     throw error;
+  } finally {
+    // Save any updates made to the order
+    await chrome.storage.sync.set({ order: JSON.stringify(order) });
   }
 
-  // Save any updates made to the order
-  await chrome.storage.sync.set({ order: JSON.stringify(order) });
+  // If page navgiation should NOT be waited for (e.g. Single Page Application)
+  if (matchingStage.skipPageNavigation) {
+    // Wait for the URL to update/new page to load
+    await delay(1500);
+
+    // Check for the next stage
+    await checkOrder(logger);
+  }
 
   if (order.isComplete) {
     showBanner("success", "Order successfully placed, please check your order");

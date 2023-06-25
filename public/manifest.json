@@ -17,7 +17,14 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.fiveguys.co.uk/*", "*://*.dominos.co.uk/*", "*://*.pizzahut.co.uk/*"],
+      "matches": [
+        "*://*.fiveguys.co.uk/*",
+        "*://*.dominos.co.uk/*",
+        "*://*.pizzahut.co.uk/*",
+        "*://*.preoday.com/*",
+        "*://*.7bone.co.uk/*",
+        "*://*.papajohns.co.uk/*"
+      ],
       "js": ["js/vendor.js", "js/content_script.js"]
     }
   ],
