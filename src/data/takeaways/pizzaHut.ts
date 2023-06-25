@@ -13,10 +13,20 @@ export const PIZZA_HUT: Takeaway = {
       name: "Find Store",
       urls: ["https://www.pizzahut.co.uk/"],
       placeOrder: async (order: TakeawayOrder) => {
-        const search = await waitUntilElementExists<HTMLInputElement>("input[name='postcode']");
-        search.value = order.address.postCode;
+        const PostcodeInput = await waitUntilElementExists<HTMLInputElement>("input[name='postcode']");
+
+        if (!PostcodeInput) {
+          throw new Error("Could not find the postcode input");
+        }
+
+        PostcodeInput.value = order.address.postCode;
 
         const searchButton = await waitUntilElementExists<HTMLButtonElement>("button[data-synth='button--delivery']");
+
+        if (!searchButton) {
+          throw new Error("Could not find the 'Order Now' button to search by postcode");
+        }
+
         searchButton.click();
       },
     },
