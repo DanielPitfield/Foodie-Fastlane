@@ -201,8 +201,12 @@ async function findFoodOptionElement(name: string, logger: Logger): Promise<{ na
   const foodOptionElements = Array.from(document.querySelectorAll<HTMLLabelElement>("label[for^='product_attribute']")).map((element) => {
     // Get the label text e.g. "Grilled Onions (12 kcal)"
     const labelText = element.textContent ?? "";
-    // Trim the calories e.g. "(12 kcal)" and remove excess whitespace
-    const name = labelText.substring(0, labelText.indexOf(" (")).trim();
+
+    const name = labelText.includes(" (")
+      ? // Trim the calories e.g. "(12 kcal)" and remove excess whitespace
+        labelText.substring(0, labelText.indexOf(" (")).trim()
+      : // Just remove excess whitespace
+        labelText.trim();
 
     return { name, element };
   });
