@@ -7,62 +7,47 @@ export const SEVEN_BONE: Takeaway = {
   name: "7Bone",
   category: "Burger",
   url: new URL("https://7bone.co.uk/"),
-  showProgress: true,
   placeOrderStages: [
     {
       name: "Select Store",
-      urls: ["https://menus.preoday.com/7Bone-Burger-Co#/main/choose-branch"],
+      urls: ["https://7bone.vmos.io/store/store-selection?app=online"],
       skipPageNavigation: true,
       placeOrder: async (order: TakeawayOrder) => {
         if (order.type !== "collection") {
           throw new Error(`Only 'collection' takeaways are supported for 7Bone`);
         }
 
-        // Wait until at least one venue/location button has loaded
-        await waitUntilElementExists(".venue-item");
+        const searchInput = await waitUntilElementExists<HTMLInputElement>("input#searchText");
 
-        // Dismiss login/loyalty dialog
-        if (document.querySelector("#appmessage-dialog")) {
-          const DismissButton = await waitUntilElementExists<HTMLButtonElement>(".modal-footer button");
-          DismissButton?.click();
+        if (!searchInput) {
+          throw new Error("Could not find the 'Enter your address' input");
         }
 
-        const StoreOptions = document.querySelectorAll<HTMLDivElement>(".venue-item");
+        // The form handling relies on events and validation beyond just DOM manipulation, therefore need to dispatch events in this sequence
+        searchInput.dispatchEvent(new Event("focus", { bubbles: true }));
 
-        if (!StoreOptions) {
-          throw new Error("Could not find any stores");
+        // Only setting the value would skip event triggers
+        searchInput.value = order.address.postCode;
+
+        searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        searchInput.dispatchEvent(new Event("change", { bubbles: true }));
+        searchInput.dispatchEvent(new Event("keyup", { bubbles: true }));
+
+        const storeOrderButton = await waitUntilElementExists<HTMLAnchorElement>("a[data-test='preorder.store.menu.overview-link']");
+
+        if (!storeOrderButton) {
+          throw new Error(`Could not find the store order button for ${order.address.postCode}`);
         }
 
-        const Store =
-          // Find a store option which has the order's town city within its text content
-          Array.from(StoreOptions).find((el) => el.textContent?.toLowerCase().includes(order.address.townCity.toLowerCase())) ??
-          // Otherwise, just use the first store location
-          StoreOptions[0];
-
-        if (!Store) {
-          throw new Error("Could not find any store to collect from");
-        }
-
-        Store.click();
-
-        const OrderButton = document.querySelector<HTMLButtonElement>(".choose-branch-view__button");
-
-        if (!OrderButton) {
-          throw new Error("Could not find the 'Order Now' button");
-        }
-
-        OrderButton.click();
+        storeOrderButton.click();
       },
     },
     {
       name: "Select Food",
-      urls: ["https://menus.preoday.com/7Bone-Burger-Co#/main/venue/menu"],
+      urls: ["https://7bone.vmos.io/store/*"],
       skipPageNavigation: true,
       placeOrder: async (order: TakeawayOrder, logger: Logger) => {
-        // Dismiss allergy dialog
-        await waitUntilElementExists("#dialog-overlay");
-        const DismissButton = await waitUntilElementExists<HTMLButtonElement>("#dialog-overlay .modal-footer button");
-        DismissButton?.click();
+        //
       },
     },
     {

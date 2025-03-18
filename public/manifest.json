@@ -23,6 +23,7 @@
         "*://*.pizzahut.co.uk/*",
         "*://*.preoday.com/*",
         "*://*.7bone.co.uk/*",
+        "*://*.7bone.vmos.io/*",
         "*://*.papajohns.co.uk/*"
       ],
       "js": ["js/vendor.js", "js/content_script.js"]
