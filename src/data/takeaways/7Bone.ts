@@ -193,6 +193,7 @@ export const SEVEN_BONE: Takeaway = {
     },
     {
       name: "Review Order",
+      // TODO: How can the extension determine that the URL has changed from the previous stage? The URL is very similar when checking out!
       urls: ["https://7bone.vmos.io/store/*"],
       skipPageNavigation: true,
       placeOrder: async (order: TakeawayOrder) => {
