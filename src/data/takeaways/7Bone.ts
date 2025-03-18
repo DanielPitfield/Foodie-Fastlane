@@ -220,6 +220,11 @@ export const SEVEN_BONE: Takeaway = {
 };
 
 async function selectDonenessOption(nextItem: TakeawayOrderFood): Promise<void> {
+  // No doneness options with chicken burgers
+  if (nextItem.categoryName?.toLowerCase().includes("chicken")) {
+    return;
+  }
+
   const doneness = nextItem.options?.find((option) => option.category === "doneness")?.name.toLowerCase();
 
   // 'Well done' (second option), otherwise pink (first option)
