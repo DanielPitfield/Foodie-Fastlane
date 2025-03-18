@@ -24,14 +24,13 @@ export const TakeawayCategoryList = (props: TakeawayCategoryListProps) => {
         return (
           <li key={category} className="takeaway-category-list-item">
             <button
-              onClick={() => props.setSelectedTakeawayCategory(category)}
-              className="takeaway-category-link"
               style={{
                 backgroundImage: `url(${chrome.runtime.getURL(`images/category-${category.toLowerCase()}.jpg`)})`,
               }}
-            >
-              {category}
-            </button>
+              className="takeaway-category-link"
+              title={category}
+              onClick={() => props.setSelectedTakeawayCategory(category)}
+            />
           </li>
         );
       })}
