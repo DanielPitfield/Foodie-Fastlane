@@ -22,7 +22,23 @@ export const FIVE_GUYS: Takeaway = {
           throw new Error("Could not find the 'Postcode Search' input");
         }
 
+        // The form handling relies on events and validation beyond just DOM manipulation, therefore need to dispatch events in this sequence
+        searchInput.dispatchEvent(new Event("focus", { bubbles: true }));
+
+        // Only setting the value would skip event triggers
         searchInput.value = order.address.postCode;
+
+        searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        searchInput.dispatchEvent(new Event("change", { bubbles: true }));
+        searchInput.dispatchEvent(new Event("keyup", { bubbles: true }));
+
+        const postcodeListItem = await waitUntilElementExists<HTMLLIElement>(".nxg-ac-item[data-type='place']");
+
+        if (!postcodeListItem) {
+          throw new Error(`Could not find postcode item for ${order.address.postCode}`);
+        }
+
+        postcodeListItem.click();
 
         const submitButton = await waitUntilElementExists<HTMLButtonElement>("button#btnfind");
 
