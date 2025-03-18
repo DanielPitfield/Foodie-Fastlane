@@ -178,7 +178,21 @@ export const SEVEN_BONE: Takeaway = {
 
         addToOrderButton.click();
 
-        // TODO: The below should be in the next stage, although it's difficult to differentiate as the url hardly changes
+        // Go back to main overview page by clicking on 7Bone logo, ready for next item
+        const homeImage = await waitUntilElementExists<HTMLImageElement>("img[data-test='logo']");
+
+        if (!homeImage) {
+          throw new Error("Could not find the home image");
+        }
+
+        homeImage.click();
+      },
+    },
+    {
+      name: "Review Order",
+      urls: ["https://7bone.vmos.io/store/*"],
+      skipPageNavigation: true,
+      placeOrder: async (order: TakeawayOrder) => {
         const cartButton = await waitUntilElementExists<HTMLSpanElement>("span[data-test='price']");
 
         if (!cartButton) {
@@ -198,13 +212,7 @@ export const SEVEN_BONE: Takeaway = {
           // Event trigger is used for validation, programatically setting checked property to false won't properly remove tip!
           tipCheckbox.click();
         }
-      },
-    },
-    {
-      name: "Review Order",
-      urls: ["https://7bone.vmos.io/store/*"],
-      skipPageNavigation: true,
-      placeOrder: async (order: TakeawayOrder) => {
+
         order.isComplete = true;
       },
     },
@@ -212,11 +220,10 @@ export const SEVEN_BONE: Takeaway = {
 };
 
 async function selectDonenessOption(nextItem: TakeawayOrderFood): Promise<void> {
-  // Default to pink (if not specified)
-  const doneness = nextItem.options?.find((option) => option.category === "doneness")?.name ?? "pink";
+  const doneness = nextItem.options?.find((option) => option.category === "doneness")?.name.toLowerCase();
 
-  // 'Pink' (first option) or 'Well done' (second option)
-  const optionNumber = doneness.includes("pink") ? 1 : 2;
+  // 'Well done' (second option), otherwise pink (first option)
+  const optionNumber = doneness?.includes("well done") ? 2 : 1;
 
   const donenessOption = await waitUntilElementExists<HTMLDivElement>(`ul > li > div > div > div:nth-child(${optionNumber})`);
 
