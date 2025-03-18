@@ -1,5 +1,5 @@
 import { Takeaway } from "../AllTakeaways";
-import { waitUntilElementExists } from "../../utils";
+import { delay, waitUntilElementExists } from "../../utils";
 import { TakeawayOrder, TakeawayOrderFood } from "../DefaultOrders";
 
 export const SEVEN_BONE: Takeaway = {
@@ -142,6 +142,9 @@ export const SEVEN_BONE: Takeaway = {
           if (!updateMealButton) {
             throw new Error("Could not find the 'Update Meal' button");
           }
+
+          // Gets stuck here without a delay!
+          await delay(1500);
 
           updateMealButton.click();
         }
