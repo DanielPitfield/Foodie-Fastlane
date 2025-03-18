@@ -1,6 +1,6 @@
 import { Takeaway } from "../AllTakeaways";
 import { waitUntilElementExists } from "../../utils";
-import { TakeawayOrder } from "../DefaultOrders";
+import { TakeawayOrder, TakeawayOrderFood } from "../DefaultOrders";
 import { Logger } from "../Other";
 
 export const SEVEN_BONE: Takeaway = {
@@ -47,7 +47,132 @@ export const SEVEN_BONE: Takeaway = {
       urls: ["https://7bone.vmos.io/store/*"],
       skipPageNavigation: true,
       placeOrder: async (order: TakeawayOrder, logger: Logger) => {
-        //
+        // Find the next item without a status (that hasn't been processed yet)
+        const nextItem = order.food.find((food) => food.status === undefined);
+
+        if (!nextItem) {
+          order.isComplete = true;
+          return;
+        }
+
+        nextItem.status = "adding-to-cart";
+
+        // e.g. 'Dry aged beef burgers'
+        const foodCategoryCard = await waitUntilElementExists<HTMLImageElement>(
+          `a[data-test='preorder.store.menu.category.bundles-link'] > img[alt='${nextItem.categoryName?.toLowerCase() ?? ""}']`
+        );
+
+        if (!foodCategoryCard) {
+          throw new Error(`Could not find the food category ${nextItem.categoryName} for ${nextItem.name}`);
+        }
+
+        foodCategoryCard.click();
+
+        // e.g. 'Triple B'
+        const foodItemCard = await waitUntilElementExists<HTMLImageElement>(
+          `div[data-test='card'] > div > img[alt='${nextItem.name?.toLowerCase() ?? ""}']`
+        );
+
+        if (!foodItemCard) {
+          throw new Error(`Could not find the food item ${nextItem.name}`);
+        }
+
+        foodItemCard.click();
+
+        const isMealDeal = nextItem.options?.some((option) => option.category === "side dish" || option.category === "topping");
+
+        // No side dish, only the burger
+        if (!isMealDeal) {
+          const getItemOnlyButton = await waitUntilElementExists<HTMLSpanElement>(
+            "div[data-test='modal-content-wrapper'] > ul > li > button"
+          );
+
+          if (!getItemOnlyButton) {
+            throw new Error("Could not find the 'Get Item Only' button");
+          }
+
+          getItemOnlyButton.click();
+
+          await selectDonenessOption(nextItem);
+
+          const addToOrderButton = await waitUntilElementExists<HTMLButtonElement>("button[data-test='footer-btn']");
+
+          if (!addToOrderButton) {
+            throw new Error("Could not find the 'Add to Order' button");
+          }
+
+          addToOrderButton.click();
+        } else {
+          // Red basket deal
+          const makeMealButton = await waitUntilElementExists<HTMLSpanElement>(
+            "div[data-test='modal-content-wrapper'] > ul > li:nth-child(2) > button"
+          );
+
+          if (!makeMealButton) {
+            throw new Error("Could not find the 'Make it a meal' button");
+          }
+
+          makeMealButton.click();
+
+          // Fries
+          if (nextItem.name.toLowerCase().includes("fries") || nextItem.name.toLowerCase().includes("poutine")) {
+            const addFriesButton = await waitUntilElementExists<HTMLDivElement>("section > div:nth-child(2) > div[data-test='list-card']");
+
+            if (!addFriesButton) {
+              throw new Error("Could not find the 'Choose your fries' button");
+            }
+
+            addFriesButton.click();
+
+            // e.g. 'Chilli Cheese Fries'
+            const foodItemCard = await waitUntilElementExists<HTMLImageElement>(
+              `div[data-test='card'] > div > img[alt='${nextItem.name?.toLowerCase() ?? ""}']`
+            );
+
+            if (!foodItemCard) {
+              throw new Error(`Could not find the food item ${nextItem.name}`);
+            }
+
+            foodItemCard.click();
+
+            const updateMealButton = await waitUntilElementExists<HTMLButtonElement>("button[data-test='footer-btn']");
+
+            if (!updateMealButton) {
+              throw new Error("Could not find the 'Update Meal' button");
+            }
+
+            updateMealButton.click();
+          }
+        }
+
+        // Must go back and select doneness of burger
+        const customiseBurgerButton = await waitUntilElementExists<HTMLDivElement>("section > div > div[data-test='list-card']");
+
+        if (!customiseBurgerButton) {
+          throw new Error("Could not find the 'Customise your burger' button");
+        }
+
+        customiseBurgerButton.click();
+
+        await selectDonenessOption(nextItem);
+
+        // Update burger
+        const updateMealButton = await waitUntilElementExists<HTMLButtonElement>("button[data-test='footer-btn']");
+
+        if (!updateMealButton) {
+          throw new Error("Could not find the 'Update Meal' button");
+        }
+
+        updateMealButton.click();
+
+        // Now can add to basket
+        const addToOrderButton = await waitUntilElementExists<HTMLButtonElement>("button[data-test='footer-complete-button']");
+
+        if (!addToOrderButton) {
+          throw new Error("Could not find the 'Add to Order' button");
+        }
+
+        addToOrderButton.click();
       },
     },
     {
@@ -60,3 +185,19 @@ export const SEVEN_BONE: Takeaway = {
     },
   ],
 };
+
+async function selectDonenessOption(nextItem: TakeawayOrderFood): Promise<void> {
+  // Default to pink (if not specified)
+  const doneness = nextItem.options?.find((option) => option.category === "doneness")?.name ?? "pink";
+
+  // 'Pink' (first option) or 'Well done' (second option)
+  const optionNumber = doneness.includes("pink") ? 1 : 2;
+
+  const donenessOption = await waitUntilElementExists<HTMLDivElement>(`ul > li > div > div > div:nth-child(${optionNumber})`);
+
+  if (!donenessOption) {
+    throw new Error(`Could not find an option for doneness ${doneness}`);
+  }
+
+  donenessOption.click();
+}

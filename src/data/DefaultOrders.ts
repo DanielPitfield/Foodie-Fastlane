@@ -25,13 +25,14 @@ export type TakeawayOrderAddress = {
 
 export type TakeawayOrderFood = {
   name: string;
+  categoryName?: string;
   quantity: number;
   status?: "adding-to-cart" | "in-cart";
   options?: TakeawayOrderFoodOption[];
 };
 
 export type TakeawayOrderFoodOption = {
-  category: "size" | "topping";
+  category: "size" | "doneness" | "topping" | "side dish";
   name: string;
   quantity: number;
   status?: "adding-to-cart" | "in-cart";
@@ -48,6 +49,23 @@ export const DEFAULT_ORDER: TakeawayOrder = {
   },
   time: "ASAP",
   food: [],
+};
+
+// A test order of 4 burgers (red basket deals) and 3 portions of chicken tenders
+const DEFAULT_7_BONE_ORDER: TakeawayOrder = {
+  ...DEFAULT_ORDER,
+  food: [
+    // M
+    {
+      name: "Triple B",
+      categoryName: "Dry aged beef burgers",
+      quantity: 1,
+      options: [
+        { category: "doneness", name: "straight up well done", quantity: 1 },
+        { category: "side dish", name: "kung fu fries", quantity: 1 },
+      ],
+    },
+  ],
 };
 
 // A test order of 4 burgers and 3 cajun fries
@@ -187,14 +205,12 @@ const DEFAULT_PAPA_JOHNS_ORDER: TakeawayOrder = {
     {
       name: "Chicken, Pesto and Mushroom",
       quantity: 1,
-      options: [
-        { category: "size", name: 'XXL Original', quantity: 1 },
-      ],
+      options: [{ category: "size", name: "XXL Original", quantity: 1 }],
     },
     {
       name: "American Hot",
       quantity: 1,
-      options: [{ category: "size", name: 'Large Authentic Thin Crust', quantity: 1 }],
+      options: [{ category: "size", name: "Large Authentic Thin Crust", quantity: 1 }],
     },
     {
       name: "Potato Tots",
@@ -221,22 +237,22 @@ const DEFAULT_PAPA_JOHNS_ORDER: TakeawayOrder = {
 };
 
 export const ALL_DEFAULT_ORDERS: Partial<Record<TakeawayName, TakeawayOrder | null>> = {
-  "7Bone": null,
+  "7Bone": DEFAULT_7_BONE_ORDER,
   "Burger King": null,
-  "Costa": null,
+  Costa: null,
   "Domino's Pizza": DEFAULT_DOMINOS_ORDER,
-  "Fireaway": null,
+  Fireaway: null,
   "Five Guys": DEFAULT_FIVE_GUYS_ORDER,
-  "Greggs": null,
-  "KFC": null,
-  "Leon": null,
+  Greggs: null,
+  KFC: null,
+  Leon: null,
   "McDonald's": null,
   "Papa John's": DEFAULT_PAPA_JOHNS_ORDER,
   "Pizza Express": null,
   "Pizza Hut": null,
   "Pret a Manger": null,
-  "Subway": null,
+  Subway: null,
   "TGI Fridays": null,
-  "Wagamama": null,
+  Wagamama: null,
   "Yo! Sushi": null,
 };
