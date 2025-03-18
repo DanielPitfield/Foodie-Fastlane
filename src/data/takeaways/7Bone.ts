@@ -167,6 +167,9 @@ export const SEVEN_BONE: Takeaway = {
           throw new Error("Could not find the 'Update Meal' button");
         }
 
+        // Gets stuck here without a delay!
+        await delay(1500);
+
         updateMealButton.click();
 
         // Now can add to basket
@@ -220,8 +223,9 @@ export const SEVEN_BONE: Takeaway = {
 };
 
 async function selectDonenessOption(nextItem: TakeawayOrderFood): Promise<void> {
-  // No doneness options with chicken burgers
-  if (nextItem.categoryName?.toLowerCase().includes("chicken")) {
+  // No doneness options with chicken (buttermilk fried) burgers, this becomes the chicken/vegan/halloumi options
+  if (nextItem.categoryName?.toLowerCase().includes("buttermilk")) {
+    // Chicken option selected by default, early return
     return;
   }
 
