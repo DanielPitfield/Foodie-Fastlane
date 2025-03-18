@@ -1,7 +1,6 @@
 import { Takeaway } from "../AllTakeaways";
 import { waitUntilElementExists } from "../../utils";
 import { TakeawayOrder, TakeawayOrderFood } from "../DefaultOrders";
-import { Logger } from "../Other";
 
 export const SEVEN_BONE: Takeaway = {
   name: "7Bone",
@@ -46,7 +45,7 @@ export const SEVEN_BONE: Takeaway = {
       name: "Select Food",
       urls: ["https://7bone.vmos.io/store/*"],
       skipPageNavigation: true,
-      placeOrder: async (order: TakeawayOrder, logger: Logger) => {
+      placeOrder: async (order: TakeawayOrder) => {
         // Find the next item without a status (that hasn't been processed yet)
         const nextItem = order.food.find((food) => food.status === undefined);
 
@@ -175,11 +174,29 @@ export const SEVEN_BONE: Takeaway = {
         }
 
         addToOrderButton.click();
+
+        // TODO: The below should be in the next stage, although it's difficult to differentiate as the url hardly changes
+        const cartButton = await waitUntilElementExists<HTMLSpanElement>("span[data-test='price']");
+
+        if (!cartButton) {
+          throw new Error("Could not find the cart/checkbout button");
+        }
+
+        cartButton.click();
+
+        // By default, there is a 7.5% tip, opt out!
+        const tipCheckbox = await waitUntilElementExists<HTMLInputElement>("input#checkbox-undefined");
+
+        if (!tipCheckbox) {
+          throw new Error("Could not find the 'Add a tip?' checkbox");
+        }
+
+        tipCheckbox.checked = false;
       },
     },
     {
       name: "Review Order",
-      urls: ["https://www.dominos.co.uk/basketdetails/show"],
+      urls: ["https://7bone.vmos.io/store/*"],
       skipPageNavigation: true,
       placeOrder: async (order: TakeawayOrder) => {
         order.isComplete = true;
