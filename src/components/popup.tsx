@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
+import useTargetInfo from "../hooks/useTargetInfo";
+import useOrder from "../hooks/useOrder";
 import { createRoot } from "react-dom/client";
 import { Wrapper } from "./Wrapper";
 import { TakeawayCategoryList } from "./TakeawayCategoryList";
 import { TakeawayList } from "./TakeawayList";
 import { ALL_TAKEAWAYS, Takeaway, TakeawayCategory, TakeawayName } from "../data/AllTakeaways";
 import { convertTakeawayURLsToNames, getDefaultOrder, getTargetTakeaways } from "../utils";
-import useTargetInfo from "../hooks/useTargetInfo";
-import useOrder from "../hooks/useOrder";
 
 const Popup = () => {
   const targetInfo = useTargetInfo();
+
   const [availableTakeaways, setAvailableTakeaways] = useState<Takeaway[]>([]);
   const [selectedTakeawayCategory, setSelectedTakeawayCategory] = useState<TakeawayCategory | null>(null);
   const [selectedTakeaway, setSelectedTakeaway] = useState<Takeaway | null>(null);
@@ -17,10 +18,12 @@ const Popup = () => {
   useEffect(() => {
     (async () => {
       const targetTakeaways = await getTargetTakeaways();
+
       // What are the names of the takeaways which are enabled in the options?
       const enabledTakeawayNames: TakeawayName[] = targetTakeaways.filter((option) => option.isEnabled).map((option) => option.name);
+      const availableTakeaways = ALL_TAKEAWAYS.filter((takeaway) => enabledTakeawayNames.includes(takeaway.name));
 
-      setAvailableTakeaways(ALL_TAKEAWAYS.filter((takeaway) => enabledTakeawayNames.includes(takeaway.name)));
+      setAvailableTakeaways(availableTakeaways);
     })();
   }, []);
 
@@ -33,6 +36,7 @@ const Popup = () => {
         <div className="status" data-is-target-open={targetInfo.isOpen}>
           {`${convertTakeawayURLsToNames(targetInfo.openTakeawayURLs)}`}
         </div>
+
         <div className="description">{`Auto ordering is available for ${
           targetInfo.openTakeawayURLs.length > 1 ? "these sites!" : "this site!"
         }`}</div>

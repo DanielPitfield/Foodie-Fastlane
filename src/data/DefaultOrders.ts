@@ -222,40 +222,19 @@ const DEFAULT_DOMINOS_ORDER: TakeawayOrder = {
   ],
 };
 
-// A test order
+// A test order (2 XXL pizzas)
 const DEFAULT_PAPA_JOHNS_ORDER: TakeawayOrder = {
   ...DEFAULT_ORDER,
   food: [
     {
-      name: "Chicken, Pesto and Mushroom",
+      name: "BBQ Chicken Classic",
       quantity: 1,
-      options: [{ category: "size", name: "XXL Original", quantity: 1 }],
+      options: [{ category: "size", name: "XXL Authentic Thin Crust", quantity: 1 }],
     },
     {
       name: "American Hot",
       quantity: 1,
-      options: [{ category: "size", name: "Large Authentic Thin Crust", quantity: 1 }],
-    },
-    {
-      name: "Potato Tots",
-      quantity: 1,
-    },
-    {
-      name: "Garlic Pizza Sticks",
-      quantity: 2,
-    },
-    {
-      name: "Special Garlic",
-      quantity: 3,
-    },
-    {
-      name: "BBQ",
-      quantity: 2,
-    },
-    {
-      name: "Pepsi Max",
-      quantity: 1,
-      options: [{ category: "size", name: "1.5l Bottle", quantity: 1 }],
+      options: [{ category: "size", name: "XXL Authentic Thin Crust", quantity: 1 }],
     },
   ],
 };
