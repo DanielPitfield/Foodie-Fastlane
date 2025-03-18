@@ -191,7 +191,10 @@ export const SEVEN_BONE: Takeaway = {
           throw new Error("Could not find the 'Add a tip?' checkbox");
         }
 
-        tipCheckbox.checked = false;
+        if (tipCheckbox.checked) {
+          // Event trigger is used for validation, programatically setting checked property to false won't properly remove tip!
+          tipCheckbox.click();
+        }
       },
     },
     {
