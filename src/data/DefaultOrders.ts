@@ -51,7 +51,7 @@ export const DEFAULT_ORDER: TakeawayOrder = {
   food: [],
 };
 
-// A test order of 4 burgers (red basket deals) and 3 portions of chicken tenders
+// A test order of 4 burgers (red basket deals)
 const DEFAULT_7_BONE_ORDER: TakeawayOrder = {
   ...DEFAULT_ORDER,
   food: [
@@ -61,9 +61,33 @@ const DEFAULT_7_BONE_ORDER: TakeawayOrder = {
       categoryName: "Dry aged beef burgers",
       quantity: 1,
       options: [
-        { category: "doneness", name: "straight up well done", quantity: 1 },
+        { category: "doneness", name: "well done", quantity: 1 },
         { category: "side dish", name: "kung fu fries", quantity: 1 },
       ],
+    },
+
+    // F
+    {
+      name: "One big chicken",
+      categoryName: "Buttermilk fried burgers",
+      quantity: 1,
+      options: [{ category: "side dish", name: "chippy fries", quantity: 1 }],
+    },
+
+    // B
+    {
+      name: "Triple B",
+      categoryName: "Dry aged beef burgers",
+      quantity: 1,
+      options: [{ category: "side dish", name: "chilli cheese fries", quantity: 1 }],
+    },
+
+    // D
+    {
+      name: "Robert Johnston",
+      categoryName: "Dry aged beef burgers",
+      quantity: 1,
+      options: [{ category: "side dish", name: "chilli cheese fries", quantity: 1 }],
     },
   ],
 };
