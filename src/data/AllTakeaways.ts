@@ -29,8 +29,8 @@ export type Takeaway = {
   saveOrder?: (logger: Logger) => Promise<void>;
 };
 
-export type TakeawayName = typeof takeawayNames[number];
-export type TakeawayCategory = typeof takeawayCategories[number];
+export type TakeawayName = (typeof takeawayNames)[number];
+export type TakeawayCategory = (typeof takeawayCategories)[number];
 
 export const takeawayCategories = ["Pizza", "Burger", "Sandwich", "Coffee", "Sushi"] as const;
 export const takeawayNames = [

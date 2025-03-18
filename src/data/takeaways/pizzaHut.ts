@@ -1,13 +1,11 @@
 import { Takeaway } from "../AllTakeaways";
 import { TakeawayOrder } from "../DefaultOrders";
 import { waitUntilElementExists } from "../../utils";
-import { Logger } from "../Other";
 
 export const PIZZA_HUT: Takeaway = {
   name: "Pizza Hut",
   category: "Pizza",
   url: new URL("https://www.pizzahut.co.uk"),
-  showProgress: true,
   placeOrderStages: [
     {
       name: "Find Store",

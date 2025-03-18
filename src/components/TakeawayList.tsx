@@ -19,11 +19,10 @@ export const TakeawayList = (props: TakeawayListProps) => {
             return (
               <li key={takeaway.name} className="takeaway-list-item">
                 <a
-                  href={takeaway.url.toString()}
-                  onClick={() => props.setSelectedTakeaway(takeaway)}
                   className="takeaway-link"
+                  href={takeaway.url.toString()}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => props.setSelectedTakeaway(takeaway)}
                 >
                   {takeaway.name}
                 </a>
