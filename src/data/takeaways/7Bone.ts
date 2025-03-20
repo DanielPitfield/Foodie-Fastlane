@@ -50,7 +50,9 @@ export const SEVEN_BONE: Takeaway = {
         const nextItem = order.food.find((food) => food.status === undefined);
 
         if (!nextItem) {
+          await reviewOrder();
           order.isComplete = true;
+
           return;
         }
 
@@ -144,7 +146,7 @@ export const SEVEN_BONE: Takeaway = {
           }
 
           // Gets stuck here without a delay!
-          await delay(1500);
+          await delay(2500);
 
           updateMealButton.click();
         }
@@ -168,7 +170,7 @@ export const SEVEN_BONE: Takeaway = {
         }
 
         // Gets stuck here without a delay!
-        await delay(1500);
+        await delay(2500);
 
         updateMealButton.click();
 
@@ -189,35 +191,6 @@ export const SEVEN_BONE: Takeaway = {
         }
 
         homeImage.click();
-      },
-    },
-    {
-      name: "Review Order",
-      // TODO: How can the extension determine that the URL has changed from the previous stage? The URL is very similar when checking out!
-      urls: ["https://7bone.vmos.io/store/*"],
-      skipPageNavigation: true,
-      placeOrder: async (order: TakeawayOrder) => {
-        const cartButton = await waitUntilElementExists<HTMLSpanElement>("span[data-test='price']");
-
-        if (!cartButton) {
-          throw new Error("Could not find the cart/checkbout button");
-        }
-
-        cartButton.click();
-
-        // By default, there is a 7.5% tip, opt out!
-        const tipCheckbox = await waitUntilElementExists<HTMLInputElement>("input#checkbox-undefined");
-
-        if (!tipCheckbox) {
-          throw new Error("Could not find the 'Add a tip?' checkbox");
-        }
-
-        if (tipCheckbox.checked) {
-          // Event trigger is used for validation, programatically setting checked property to false won't properly remove tip!
-          tipCheckbox.click();
-        }
-
-        order.isComplete = true;
       },
     },
   ],
@@ -242,4 +215,26 @@ async function selectDonenessOption(nextItem: TakeawayOrderFood): Promise<void> 
   }
 
   donenessOption.click();
+}
+
+async function reviewOrder(): Promise<void> {
+  const cartButton = await waitUntilElementExists<HTMLSpanElement>("span[data-test='price']");
+
+  if (!cartButton) {
+    throw new Error("Could not find the cart/checkbout button");
+  }
+
+  cartButton.click();
+
+  // By default, there is a 7.5% tip, opt out!
+  const tipCheckbox = await waitUntilElementExists<HTMLInputElement>("input#checkbox-undefined");
+
+  if (!tipCheckbox) {
+    throw new Error("Could not find the 'Add a tip?' checkbox");
+  }
+
+  if (tipCheckbox.checked) {
+    // Event trigger is used for validation, programatically setting checked property to false won't properly remove tip!
+    tipCheckbox.click();
+  }
 }
